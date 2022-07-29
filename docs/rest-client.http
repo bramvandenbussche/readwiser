@@ -1,0 +1,19 @@
+
+
+GET {{api-base-url}}/api/highlight
+
+######
+
+POST {{api-base-url}}/api/highlight
+content-type: application/json
+
+{
+  "highlights": [
+    {
+      "title": "Red Rising",
+      "text": "The suit is some kind of nanoplastic and is hot as its name suggests.",
+      "author": "Pierce Brown",
+      "chapter": "1: Helldiver"
+    }
+  ]
+}

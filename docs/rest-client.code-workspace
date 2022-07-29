@@ -1,0 +1,22 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"rest-client.environmentVariables": {
+			"$shared": {
+			},
+			"local": {
+				"token": "abc123",
+				"api-base-url": "https://localhost:7113",
+			},
+			"production": {
+                "token": "abc123",
+				"api-base-url": "https://readwiser.azurewebsites.com",
+			}
+		},
+		"rest-client.requestNameAsResponseTabTitle": true
+	}
+}
