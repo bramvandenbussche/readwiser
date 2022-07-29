@@ -30,6 +30,7 @@ namespace bramvandenbussche.readwiser.api.Controllers
             {
                 _cache.Add(h);
             }
+
             return Ok(_cache.Count);
         }
     }
