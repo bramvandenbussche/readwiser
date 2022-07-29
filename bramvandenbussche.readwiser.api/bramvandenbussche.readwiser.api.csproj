@@ -8,11 +8,14 @@
 
   <ItemGroup>
     <Folder Include="Domain\" />
+    <Folder Include="Infrastructure\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Azure.Data.Tables" Version="12.6.1" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.13.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="Scrutor.AspNetCore" Version="3.3.0" />
   </ItemGroup>
 
 </Project>
