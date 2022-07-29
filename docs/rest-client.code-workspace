@@ -14,7 +14,7 @@
 			},
 			"production": {
                 "token": "abc123",
-				"api-base-url": "https://readwiser.azurewebsites.com",
+				"api-base-url": "https://readwiser-api.azurewebsites.net",
 			}
 		},
 		"rest-client.requestNameAsResponseTabTitle": true
