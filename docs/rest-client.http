@@ -23,6 +23,7 @@ Authorization: Token {{api-key}}
 
 POST {{api-base-url}}/api/highlight
 content-type: application/json
+Authorization: Token {{api-key}}
 
 {
   "highlights": [
