@@ -1,7 +1,7 @@
-using System.Collections.Concurrent;
+using System.Text.Json;
 using bramvandenbussche.readwiser.api.DataAccess;
-using bramvandenbussche.readwiser.api.Domain;
 using bramvandenbussche.readwiser.api.Dto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace bramvandenbussche.readwiser.api.Controllers
@@ -21,15 +21,27 @@ namespace bramvandenbussche.readwiser.api.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult> GetAll()
         {
             var data = await _repository.GetAll();
             return Ok(data.ToList());
         }
-        
+
+        [HttpGet("book")]
+        [Authorize]
+        public async Task<ActionResult> GetHighlightsForBook(string title, string author)
+        {
+            var data = await _repository.GetForBook(title, author);
+            return Ok(data.ToList());
+        }
+
         [HttpPost()]
+        [Authorize]
         public ActionResult AddNewHighlight([FromBody] HighlightRequestDto request)
         {
+            var json = JsonSerializer.Serialize(request);
+            _logger.LogDebug(json);
             foreach (var note in request.Highlights)
             {
                 _repository.Save(note.ToDomain());

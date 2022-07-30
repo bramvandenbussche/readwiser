@@ -1,8 +1,25 @@
 
+@title = Golden Son
+@author = Pierce Brown
+@api-key = all-good
 
-GET {{api-base-url}}/api/highlight
 
 ######
+### Get all notes and highlights
+
+GET {{api-base-url}}/api/highlight
+Authorization: Token {{api-key}}
+
+
+######
+### Get all notes and highlights for one book
+
+GET {{api-base-url}}/api/highlight/book?title={{title}}&author={{author}}
+
+
+
+######
+### Create new highlight
 
 POST {{api-base-url}}/api/highlight
 content-type: application/json

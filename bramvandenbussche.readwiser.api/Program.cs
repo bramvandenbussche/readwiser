@@ -7,6 +7,12 @@ var configuration = builder.Configuration;
 
 builder.Services.AddControllers();
 builder.Services.AddDependencyInjection(configuration);
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = ApiKeyAuthenticationOptions.DefaultScheme;
+        options.DefaultChallengeScheme = ApiKeyAuthenticationOptions.DefaultScheme;
+    })
+    .AddApiKeySupport(options => { });
 
 var app = builder.Build();
 
@@ -14,6 +20,7 @@ var app = builder.Build();
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
