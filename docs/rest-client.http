@@ -1,7 +1,7 @@
 
-@title = Golden Son
-@author = Pierce Brown
 @api-key = ABC123
+@title = Test
+@author = Bram
 
 ######
 ### Get all notes and highlights
@@ -28,10 +28,11 @@ Authorization: Token {{api-key}}
 {
   "highlights": [
     {
-      "title": "Red Rising",
-      "text": "The suit is some kind of nanoplastic and is hot as its name suggests.",
-      "author": "Pierce Brown",
-      "chapter": "1: Helldiver"
+      "title": "{{title}}",
+      "text": "Lorem Ipsum",
+      "author": "{{author}}",
+      "chapter": "Chapter 1",
+      "note": "hello world!"
     }
   ]
 }
