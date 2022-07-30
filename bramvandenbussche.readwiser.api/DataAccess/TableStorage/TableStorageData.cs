@@ -95,9 +95,9 @@ namespace bramvandenbussche.readwiser.api.DataAccess.TableStorage
             }); 
         #endregion
 
-        public Task<INote[]> GetNotes(string[] partitionKeyValues, params Type[] eventTypes)
+        public Task<INote[]> GetNotes(string[] partitionKeyValues, params Type[] noteTypes)
         {
-            throw new NotImplementedException();
+            return GetOrderedEvents(partitionKeyValues, noteTypes);
         }
     }
 }

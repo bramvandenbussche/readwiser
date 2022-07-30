@@ -14,9 +14,11 @@ public class NoteRepository : INoteRepository
         _writer = writer;
     }
 
-    public Task<IEnumerable<INote>> GetAll()
+    public async Task<IEnumerable<Highlight>> GetAll()
     {
-        throw new NotImplementedException();
+        var data = await _reader.GetNotes(new string[]{ }, typeof(Highlight));
+
+        return data.Select(d => d as Highlight)!;
     }
 
     public Task Save(INote note)
@@ -27,6 +29,6 @@ public class NoteRepository : INoteRepository
 
 public interface INoteRepository
 {
-    public Task<IEnumerable<INote>> GetAll();
+    public Task<IEnumerable<Highlight>> GetAll();
     public Task Save(INote note);
 }

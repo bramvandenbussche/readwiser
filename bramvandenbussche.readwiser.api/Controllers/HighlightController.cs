@@ -22,9 +22,10 @@ namespace bramvandenbussche.readwiser.api.Controllers
         }
 
         [HttpGet]
-        public ActionResult Get()
+        public async Task<ActionResult> GetAll()
         {
-            return Ok(_cache.ToList());
+            var data = await _repository.GetAll();
+            return Ok(data.ToList());
         }
         
         [HttpPost()]

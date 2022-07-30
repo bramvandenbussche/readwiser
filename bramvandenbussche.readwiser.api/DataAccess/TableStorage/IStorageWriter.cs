@@ -9,5 +9,5 @@ public interface IStorageWriter
 
 public interface IStorageReader
 {
-    Task<INote[]> GetNotes(string[] partitionKeyValues, params Type[] eventTypes);
+    Task<INote[]> GetNotes(string[] partitionKeyValues, params Type[] noteTypes);
 }
