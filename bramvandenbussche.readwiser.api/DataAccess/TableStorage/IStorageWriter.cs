@@ -4,10 +4,10 @@ namespace bramvandenbussche.readwiser.api.DataAccess.TableStorage;
 
 public interface IStorageWriter
 {
-    Task Write(INote note);
+    Task Write(IDataRecord dataRecord);
 }
 
 public interface IStorageReader
 {
-    Task<INote[]> GetNotes(string[] partitionKeyValues, params Type[] noteTypes);
+    Task<IDataRecord[]> GetNotes(string[] partitionKeyValues, params Type[] noteTypes);
 }

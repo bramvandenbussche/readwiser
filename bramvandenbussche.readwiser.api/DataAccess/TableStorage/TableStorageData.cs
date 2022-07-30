@@ -17,22 +17,22 @@ namespace bramvandenbussche.readwiser.api.DataAccess.TableStorage
             _clientFactory = clientFactory;
         }
 
-        public async Task Write(INote note)
+        public async Task Write(IDataRecord dataRecord)
         {
-            var serialized = await _serializer.Serialize(note);
-            var client = await _clientFactory.GetTableClient(GetTableName(note));
+            var serialized = await _serializer.Serialize(dataRecord);
+            var client = await _clientFactory.GetTableClient(GetTableName(dataRecord));
             await client.AddEntityAsync(serialized);
         }
 
-        public Task<INote[]> GetOrderedEvents(string[] partitionKeyValues, params Type[] eventTypes) =>
+        public Task<IDataRecord[]> GetOrderedEvents(string[] partitionKeyValues, params Type[] eventTypes) =>
             GetOrderedEvents(partitionKeyValues, null, eventTypes);
 
 
         
-        public async Task<INote[]> GetOrderedEvents(string[] partitionKeyValues, DateTimeOffset? atSpecificTimeUtc,
+        public async Task<IDataRecord[]> GetOrderedEvents(string[] partitionKeyValues, DateTimeOffset? atSpecificTimeUtc,
             params Type[] eventTypes)
         {
-            var result = new ConcurrentBag<INote>();
+            var result = new ConcurrentBag<IDataRecord>();
 
             var filter = string.Join(" or ", partitionKeyValues.Select(p => $"(PartitionKey eq '{p}')"));
             var timeFilter = atSpecificTimeUtc.HasValue
@@ -51,7 +51,7 @@ namespace bramvandenbussche.readwiser.api.DataAccess.TableStorage
                 var tableEntities =
                     await _cache.GetOrCreateAsync(tableEntityCacheKey, _ => Task.FromResult(new ConcurrentDictionary<string, TableEntity>()));
 
-                var events = await _cache.GetOrCreateAsync(eventsCacheKey, entry => Task.FromResult(new ConcurrentDictionary<string, INote>()));
+                var events = await _cache.GetOrCreateAsync(eventsCacheKey, entry => Task.FromResult(new ConcurrentDictionary<string, IDataRecord>()));
 
                 var latestCachedEventTime = tableEntities.Any() ? tableEntities.Values.Max(x => x.Timestamp.GetValueOrDefault()) : new DateTime(1601, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
@@ -84,18 +84,18 @@ namespace bramvandenbussche.readwiser.api.DataAccess.TableStorage
         public const string DateTimeFormat = "yyyy-MM-ddTHH:mm:ss.fffZ";
         #region EventsToTableName
         private ConcurrentDictionary<Type, string> EventsTableNameCache = new();
-        private string GetTableName(INote note) =>
-            EventsTableNameCache.GetOrAdd(note.GetType(), type => note.TableName);
+        private string GetTableName(IDataRecord dataRecord) =>
+            EventsTableNameCache.GetOrAdd(dataRecord.GetType(), type => dataRecord.TableName);
 
         private string GetTableName(Type eventType) =>
             EventsTableNameCache.GetOrAdd(eventType, type =>
             {
-                var theNote = (INote)Activator.CreateInstance(type);
+                var theNote = (IDataRecord)Activator.CreateInstance(type);
                 return theNote.TableName;
             }); 
         #endregion
 
-        public Task<INote[]> GetNotes(string[] partitionKeyValues, params Type[] noteTypes)
+        public Task<IDataRecord[]> GetNotes(string[] partitionKeyValues, params Type[] noteTypes)
         {
             return GetOrderedEvents(partitionKeyValues, noteTypes);
         }

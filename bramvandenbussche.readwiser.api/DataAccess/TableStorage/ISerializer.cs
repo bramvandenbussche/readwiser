@@ -5,7 +5,7 @@ namespace bramvandenbussche.readwiser.api.DataAccess.TableStorage
 {
     public interface ISerializer
     {
-        Task<TableEntity> Serialize(INote note);
-        Task<INote> Deserialize(TableEntity entity, Type eventType);
+        Task<TableEntity> Serialize(IDataRecord dataRecord);
+        Task<IDataRecord> Deserialize(TableEntity entity, Type eventType);
     }
 }

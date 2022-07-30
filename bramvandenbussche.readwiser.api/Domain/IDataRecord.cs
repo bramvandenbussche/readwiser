@@ -1,6 +1,6 @@
 ﻿namespace bramvandenbussche.readwiser.api.Domain;
 
-public interface INote
+public interface IDataRecord
 {
     /// <summary>
     /// Unique Identifier for the event

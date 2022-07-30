@@ -1,18 +1,14 @@
 ﻿namespace bramvandenbussche.readwiser.api.Domain;
 
-public class Highlight : AbstractNote
+public class Highlight : AbstractDataRecord
 {
     public string Title { get; set; }
     public string Author { get; set; }
     public string Text { get; set; }
     public string Chapter { get; set; }
 
-    public override string PartitionKey => $"{Author.ToLower().Replace(" ", "_")}-{Title.ToLower().Replace(" ", "_")}";
-}
+    public override string PartitionKey => GetPartitionKey(Title, Author);
 
-public abstract class AbstractNote : INote
-{
-    public Guid NoteId { get; set; } = Guid.NewGuid();
-    public abstract string PartitionKey { get; }
-    public DateTimeOffset RaisedTime { get; set; } = DateTimeOffset.UtcNow;
+    public static string GetPartitionKey(string title, string author) =>
+        $"{author.ToLower().Replace(" ", "_")}-{title.ToLower().Replace(" ", "_")}";
 }

@@ -14,16 +14,16 @@ namespace bramvandenbussche.readwiser.api.DataAccess.TableStorage
             _storeBigThings = storeBigThings;
         }
 
-        public async Task<TableEntity> Serialize(INote note)
+        public async Task<TableEntity> Serialize(IDataRecord dataRecord)
         {
-            var entity = new TableEntity(note.PartitionKey, note.RowId);
+            var entity = new TableEntity(dataRecord.PartitionKey, dataRecord.RowId);
 
-            var eventType = note.GetType();
+            var eventType = dataRecord.GetType();
 
-            var rawData = JsonSerializer.Serialize(note, eventType, Options);
+            var rawData = JsonSerializer.Serialize(dataRecord, eventType, Options);
             if (rawData.Length > 30000)
             {
-                var reference = await _storeBigThings.StoreBigString(note.TableName, note.NoteId, rawData);
+                var reference = await _storeBigThings.StoreBigString(dataRecord.TableName, dataRecord.NoteId, rawData);
                 rawData = "Ref|" + reference;
             }
 
@@ -36,7 +36,7 @@ namespace bramvandenbussche.readwiser.api.DataAccess.TableStorage
             {
                 var name = entity.ContainsKey(property.Name) ? $"prop_{property.Name}" : property.Name;
 
-                var value = property.GetValue(note);
+                var value = property.GetValue(dataRecord);
 
                 if (property.PropertyType == typeof(DateTime))
                 {
@@ -55,7 +55,7 @@ namespace bramvandenbussche.readwiser.api.DataAccess.TableStorage
             return entity;
         }
 
-        public async Task<INote> Deserialize(TableEntity entity, Type eventType)
+        public async Task<IDataRecord> Deserialize(TableEntity entity, Type eventType)
         {
             var rawData = (string)entity["RawData"];
             if (rawData.StartsWith("Ref|"))
@@ -63,7 +63,7 @@ namespace bramvandenbussche.readwiser.api.DataAccess.TableStorage
                 var reference = rawData.Substring(4);
                 rawData = await _storeBigThings.GetBigString(reference);
             }
-            return (INote)JsonSerializer.Deserialize(rawData, eventType, Options);
+            return (IDataRecord)JsonSerializer.Deserialize(rawData, eventType, Options);
         }
     }
 }

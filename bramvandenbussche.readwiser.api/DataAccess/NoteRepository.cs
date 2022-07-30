@@ -21,14 +21,23 @@ public class NoteRepository : INoteRepository
         return data.Select(d => d as Highlight)!;
     }
 
-    public Task Save(INote note)
+    public async Task<IEnumerable<Highlight>> GetForBook(string title, string author)
     {
-        return _writer.Write(note);
+        var data = await _reader.GetNotes(new string[] { Highlight.GetPartitionKey(title, author) }, typeof(Highlight));
+
+        return data.Select(d => d as Highlight)!;
+    }
+
+    public Task Save(IDataRecord dataRecord)
+    {
+        return _writer.Write(dataRecord);
     }
 }
 
 public interface INoteRepository
 {
     public Task<IEnumerable<Highlight>> GetAll();
-    public Task Save(INote note);
+    public Task<IEnumerable<Highlight>> GetForBook(string title, string author);
+
+    public Task Save(IDataRecord dataRecord);
 }
