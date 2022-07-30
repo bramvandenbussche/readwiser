@@ -14,7 +14,8 @@ public static class DtoExtensions
             Author = dto.Author,
             Title = dto.Title,
             Chapter = dto.Chapter ?? string.Empty,
-            Text = dto.Text
+            Text = dto.Text,
+            Note = dto.Note
         };
     }
 
@@ -41,6 +42,7 @@ public static class DtoExtensions
         {
             Id = value.NoteId,
             HighlightText = value.Text,
+            NoteText = value.Note,
             Location = value.Chapter,
             LocationSort = value.Chapter.FindChapterNumber(),
             Timestamp = value.RaisedTime.ToString("s")
