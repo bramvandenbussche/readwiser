@@ -14,6 +14,7 @@ Authorization: Token {{api-key}}
 ### Get all notes and highlights for one book
 
 GET {{api-base-url}}/api/highlight/book?title={{title}}&author={{author}}
+Authorization: Token {{api-key}}
 
 
 
