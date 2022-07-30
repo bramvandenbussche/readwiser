@@ -10,7 +10,6 @@ namespace bramvandenbussche.readwiser.api.Controllers
     [Route("api/[controller]")]
     public class HighlightController : ControllerBase
     {
-        private static ConcurrentBag<HighlightDto> _cache = new();
         private readonly INoteRepository _repository;
 
         private readonly ILogger<HighlightController> _logger;
@@ -33,11 +32,10 @@ namespace bramvandenbussche.readwiser.api.Controllers
         {
             foreach (var note in request.Highlights)
             {
-                _cache.Add(note);
                 _repository.Save(note.ToDomain());
             }
 
-            return Ok(_cache.Count);
+            return Ok();
         }
     }
 }
