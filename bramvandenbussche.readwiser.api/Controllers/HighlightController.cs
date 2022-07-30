@@ -25,7 +25,15 @@ namespace bramvandenbussche.readwiser.api.Controllers
         public async Task<ActionResult> GetAll()
         {
             var data = await _repository.GetAll();
-            return Ok(data.ToList());
+            return Ok(data.Select(x => new HighlightResponseDto()
+            {
+                Id = x.NoteId,
+                Author = x.Author,
+                Title = x.Title,
+                HighlightText = x.Text,
+                Location = x.Chapter,
+                Timestamp = x.RaisedTime.ToString("s")
+            }).ToList());
         }
 
         [HttpGet("book")]
@@ -33,7 +41,15 @@ namespace bramvandenbussche.readwiser.api.Controllers
         public async Task<ActionResult> GetHighlightsForBook(string title, string author)
         {
             var data = await _repository.GetForBook(title, author);
-            return Ok(data.ToList());
+            return Ok(data.Select(x => new HighlightResponseDto()
+            {
+                Id = x.NoteId,
+                Author = x.Author,
+                Title = x.Title,
+                HighlightText = x.Text,
+                Location = x.Chapter,
+                Timestamp = x.RaisedTime.ToString("s")
+            }).ToList());
         }
 
         [HttpPost()]
