@@ -1,5 +1,6 @@
 using System.Text.Json;
 using bramvandenbussche.readwiser.api.DataAccess;
+using bramvandenbussche.readwiser.api.Domain;
 using bramvandenbussche.readwiser.api.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,15 +26,8 @@ namespace bramvandenbussche.readwiser.api.Controllers
         public async Task<ActionResult> GetAll()
         {
             var data = await _repository.GetAll();
-            return Ok(data.Select(x => new HighlightResponseDto()
-            {
-                Id = x.NoteId,
-                Author = x.Author,
-                Title = x.Title,
-                HighlightText = x.Text,
-                Location = x.Chapter,
-                Timestamp = x.RaisedTime.ToString("s")
-            }).ToList());
+
+            return Ok(data.ToDto());
         }
 
         [HttpGet("book")]
@@ -41,20 +35,13 @@ namespace bramvandenbussche.readwiser.api.Controllers
         public async Task<ActionResult> GetHighlightsForBook(string title, string author)
         {
             var data = await _repository.GetForBook(title, author);
-            return Ok(data.Select(x => new HighlightResponseDto()
-            {
-                Id = x.NoteId,
-                Author = x.Author,
-                Title = x.Title,
-                HighlightText = x.Text,
-                Location = x.Chapter,
-                Timestamp = x.RaisedTime.ToString("s")
-            }).ToList());
+
+            return Ok(data.ToDto());
         }
 
         [HttpPost()]
         [Authorize]
-        public ActionResult AddNewHighlight([FromBody] HighlightRequestDto request)
+        public ActionResult AddNewHighlight([FromBody] CreateHighlightRequestDto request)
         {
             var json = JsonSerializer.Serialize(request);
             _logger.LogDebug(json);

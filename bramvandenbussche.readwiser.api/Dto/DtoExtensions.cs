@@ -5,7 +5,7 @@ namespace bramvandenbussche.readwiser.api.Dto;
 
 public static class DtoExtensions
 {
-    public static Highlight ToDomain(this HighlightDto dto)
+    public static Highlight ToDomain(this CreateHighlightRequestDto.HighlightDto dto)
     {
         return new Highlight()
         {
@@ -15,6 +15,35 @@ public static class DtoExtensions
             Title = dto.Title,
             Chapter = dto.Chapter ?? string.Empty,
             Text = dto.Text
+        };
+    }
+
+    public static HighlightResponseDto ToDto(this IEnumerable<Highlight> data)
+    {
+        return new HighlightResponseDto()
+        {
+            Books = data
+                .GroupBy(x => new { x.Author, x.Title })
+                .Select(x => new HighlightResponseDto.BookDto()
+                {
+                    Id = Guid.NewGuid(),
+                    Author = x.Key.Author,
+                    Title = x.Key.Title,
+                    Highlights = x.Select(h => h.ToDto()).ToList()
+                })
+                .ToList()
+        };
+    }
+
+    public static HighlightResponseDto.HighlightDto ToDto(this Highlight value)
+    {
+        return new HighlightResponseDto.HighlightDto()
+        {
+            Id = value.NoteId,
+            HighlightText = value.Text,
+            Location = value.Chapter,
+            LocationSort = value.Chapter.FindChapterNumber(),
+            Timestamp = value.RaisedTime.ToString("s")
         };
     }
 
