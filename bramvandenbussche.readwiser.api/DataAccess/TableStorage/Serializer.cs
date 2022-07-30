@@ -40,11 +40,11 @@ namespace bramvandenbussche.readwiser.api.DataAccess.TableStorage
 
                 if (property.PropertyType == typeof(DateTime))
                 {
-                    entity.Add(name, ((DateTime) value).ToUniversalTime());
+                    entity.Add(name, ((DateTime) value!).ToUniversalTime());
                 }
                 else if (property.PropertyType.IsEnum)
                 {
-                    entity.Add(name, value.ToString());
+                    entity.Add(name, value!.ToString());
                 }
                 else
                 {
@@ -63,7 +63,7 @@ namespace bramvandenbussche.readwiser.api.DataAccess.TableStorage
                 var reference = rawData.Substring(4);
                 rawData = await _storeBigThings.GetBigString(reference);
             }
-            return (IDataRecord)JsonSerializer.Deserialize(rawData, eventType, Options);
+            return ((IDataRecord)JsonSerializer.Deserialize(rawData, eventType, Options)!);
         }
     }
 }

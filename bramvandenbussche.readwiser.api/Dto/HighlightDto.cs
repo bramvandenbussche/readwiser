@@ -9,17 +9,17 @@ public class HighlightDto
     /// Required
     /// </summary>
     [Required]
-    public string Text { get; set; }
+    public string Text { get; set; } = string.Empty;
 
     /// <summary>
     /// Title of the book/article/podcast (the "source")
     /// </summary>
-    public string Title { get; set; }
+    public string Title { get; set; } = string.Empty;
 
     /// <summary>
     /// Author of the book/article/podcast (the "source")
     /// </summary>
-    public string Author { get; set; }
+    public string Author { get; set; } = string.Empty;
 
     /// <summary>
     /// The url of a cover image for this book/article/podcast (the "source")

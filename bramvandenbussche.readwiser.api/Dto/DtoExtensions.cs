@@ -13,7 +13,7 @@ public static class DtoExtensions
             RaisedTime = DateTimeOffset.UtcNow,
             Author = dto.Author,
             Title = dto.Title,
-            Chapter = dto.Chapter,
+            Chapter = dto.Chapter ?? string.Empty,
             Text = dto.Text
         };
     }

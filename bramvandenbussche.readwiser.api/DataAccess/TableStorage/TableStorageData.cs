@@ -90,8 +90,8 @@ namespace bramvandenbussche.readwiser.api.DataAccess.TableStorage
         private string GetTableName(Type eventType) =>
             EventsTableNameCache.GetOrAdd(eventType, type =>
             {
-                var theNote = (IDataRecord)Activator.CreateInstance(type);
-                return theNote.TableName;
+                var theNote = (IDataRecord)Activator.CreateInstance(type)!;
+                return theNote!.TableName;
             }); 
         #endregion
 

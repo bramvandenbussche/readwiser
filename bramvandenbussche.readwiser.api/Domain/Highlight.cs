@@ -2,10 +2,10 @@
 
 public class Highlight : AbstractDataRecord
 {
-    public string Title { get; set; }
-    public string Author { get; set; }
-    public string Text { get; set; }
-    public string Chapter { get; set; }
+    public string Title { get; set; } = string.Empty;
+    public string Author { get; set; } = string.Empty;
+    public string Text { get; set; } = string.Empty;
+    public string Chapter { get; set; } = string.Empty;
 
     public override string PartitionKey => GetPartitionKey(Title, Author);
 
