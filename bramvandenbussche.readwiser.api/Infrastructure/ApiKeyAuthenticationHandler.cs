@@ -41,8 +41,9 @@ public class ApiKeyAuthenticationHandler : AuthenticationHandler<ApiKeyAuthentic
         }
 
         var apiKey = providedApiKey.Split(" ")[1];
+        var expected = _configuration["ApiKey"];
 
-        if (apiKey == "all-good")
+        if (apiKey == expected)
         {
             var claims = new List<Claim>
             {

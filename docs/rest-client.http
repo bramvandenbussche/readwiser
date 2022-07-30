@@ -1,8 +1,7 @@
 
 @title = Golden Son
 @author = Pierce Brown
-@api-key = all-good
-
+@api-key = ABC123
 
 ######
 ### Get all notes and highlights
