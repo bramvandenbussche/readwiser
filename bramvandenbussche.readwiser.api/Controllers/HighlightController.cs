@@ -41,13 +41,27 @@ namespace bramvandenbussche.readwiser.api.Controllers
 
         [HttpPost()]
         [Authorize]
-        public ActionResult AddNewHighlight([FromBody] CreateHighlightRequestDto request)
+        public async Task<ActionResult> AddNewHighlight([FromBody] CreateHighlightRequestDto request)
         {
-            var json = JsonSerializer.Serialize(request);
-            _logger.LogDebug(json);
+            var cache = new Dictionary<string, List<Highlight>>();
+            var makeKey = (string author, string title) => $"{author}-{title}";
+            
             foreach (var note in request.Highlights)
             {
-                _repository.Save(note.ToDomain());
+                var key = makeKey(note.Author, note.Title);
+                if (!cache.ContainsKey(key))
+                {
+                    var data = await _repository.GetForBook(note.Title, note.Author);
+                    cache.Add(key, data.ToList());
+                }
+
+                // Prevent duplicates
+                if (!cache[key].Any(x => x.Chapter == note.Chapter && x.Text == note.Text))
+                {
+                    var value = note.ToDomain();
+                    cache[key].Add(value);
+                    await _repository.Save(value);
+                }
             }
 
             return Ok();
