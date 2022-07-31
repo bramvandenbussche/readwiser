@@ -33,7 +33,7 @@ public class Highlight : AbstractDataRecord
 
     public static string GetPartitionKey(string title, string author)
     {
-        var rgx = new Regex("[^a-zA-Z]");
+        var rgx = new Regex("[^a-zA-Z_]");
 
         return $"{rgx.Replace(author.ToLower().Replace(" ", "_"), "")}-{rgx.Replace(title.ToLower().Replace(" ", "_"), "")}";
     }
