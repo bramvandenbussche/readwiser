@@ -3,7 +3,7 @@
 public interface IDataRecord
 {
     /// <summary>
-    /// Unique Identifier for the event
+    /// Unique Identifier for the record
     /// </summary>
     Guid NoteId { get; }
 

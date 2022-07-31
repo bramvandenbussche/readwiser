@@ -11,21 +11,21 @@ public class StoreBigThings: IStoreBigThings
         _clientFactory = clientFactory;
     }
 
-    public async Task<string> StoreBigString(string eventName, Guid eventId, string bigString)
+    public async Task<string> StoreBigString(string dataRecordName, Guid dataRecordId, string bigString)
     {
-        eventName = eventName.ToLower();
-        var client = await _clientFactory.GetBlobClient(eventName, $"{eventId}.json");
+        dataRecordName = dataRecordName.ToLower();
+        var client = await _clientFactory.GetBlobClient(dataRecordName, $"{dataRecordId}.json");
         await client.UploadAsync(new MemoryStream(Encoding.UTF8.GetBytes(bigString)));
-        return $"{eventName}#-#{eventId}";
+        return $"{dataRecordName}#-#{dataRecordId}";
     }
 
     public async Task<string> GetBigString(string reference)
     {
         var explosion = reference.Split("#-#");
-        var eventName = explosion[0];
-        var eventId = explosion[1];
+        var dataRecordName = explosion[0];
+        var dataRecordId = explosion[1];
 
-        var client = await _clientFactory.GetBlobClient(eventName, $"{eventId}.json");
+        var client = await _clientFactory.GetBlobClient(dataRecordName, $"{dataRecordId}.json");
         var stream = (await client.DownloadAsync()).Value.Content;
         using var streamReader = new StreamReader(stream, Encoding.UTF8);
         

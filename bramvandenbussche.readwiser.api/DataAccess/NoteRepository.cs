@@ -16,14 +16,14 @@ public class NoteRepository : INoteRepository
 
     public async Task<IEnumerable<Highlight>> GetAll()
     {
-        var data = await _reader.GetNotes(new string[]{ }, typeof(Highlight));
+        var data = await _reader.GetOrderedNotes(new string[]{ }, typeof(Highlight));
 
         return data.Select(d => d as Highlight)!;
     }
 
     public async Task<IEnumerable<Highlight>> GetForBook(string title, string author)
     {
-        var data = await _reader.GetNotes(new string[] { Highlight.GetPartitionKey(title, author) }, typeof(Highlight));
+        var data = await _reader.GetOrderedNotes(new string[] { Highlight.GetPartitionKey(title, author) }, typeof(Highlight));
 
         return data.Select(d => d as Highlight)!;
     }

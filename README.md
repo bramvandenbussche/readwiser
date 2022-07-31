@@ -32,7 +32,7 @@ Before you start, generate a secure token to protect your API from unwanted call
 
 | Key                                         | Description                                                                  |
 | ------------------------------------------- | ---------------------------------------------------------------------------- |
-| `EventStore__TableStorage.ConnectionString` | with the ConnectionString to your Table Storage resource                     |
+| `DataStore__TableStorage.ConnectionString` | with the ConnectionString to your Table Storage resource                     |
 | `ApiKey`                                    | The secure token you generated |
 | `APPINSIGHTS_INSTRUMENTATIONKEY`            | Optional: Your Application Insights InstrumentationKey                       |
 | `APPLICATIONINSIGHTS_CONNECTION_STRING`     | Optional: Application Insights ConnectionString                              |

@@ -6,15 +6,7 @@ public static class DependencyInjection
 {
     public static void AddDependencyInjection(this IServiceCollection services, IConfiguration configuration)
     {
-        var tableStorageConnectionString = configuration["EventStore:TableStorage.ConnectionString"];
-
-        var encryptionKey = configuration["InformatEncryption:EncryptionKey"];
-        var encryptionInitializationVector = configuration["InformatEncryption:InitializationVector"];
-        var salt = configuration["InformatEncryption:Salt"];
-
-        //services.AddTransient<IStorageAccountSettings>(_ => new TableStorageConfiguration(tableStorageConnectionString));
-
-        services.Scan(scan => scan
+       services.Scan(scan => scan
             .FromAssemblyOf<IStorageWriter>()
             .AddClasses()
             .AsSelf()
@@ -31,7 +23,7 @@ public class TableStorageConfiguration : IStorageAccountSettings
     
     public TableStorageConfiguration(IConfiguration configuration)
     {
-        ConnectionString = configuration["EventStore:TableStorage.ConnectionString"];
+        ConnectionString = configuration["DataStore:TableStorage.ConnectionString"];
 ;
     }
 }

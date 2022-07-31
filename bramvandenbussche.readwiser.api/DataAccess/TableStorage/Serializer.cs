@@ -18,9 +18,9 @@ namespace bramvandenbussche.readwiser.api.DataAccess.TableStorage
         {
             var entity = new TableEntity(dataRecord.PartitionKey, dataRecord.RowId);
 
-            var eventType = dataRecord.GetType();
+            var dataRecordType = dataRecord.GetType();
 
-            var rawData = JsonSerializer.Serialize(dataRecord, eventType, Options);
+            var rawData = JsonSerializer.Serialize(dataRecord, dataRecordType, Options);
             if (rawData.Length > 30000)
             {
                 var reference = await _storeBigThings.StoreBigString(dataRecord.TableName, dataRecord.NoteId, rawData);
@@ -28,10 +28,10 @@ namespace bramvandenbussche.readwiser.api.DataAccess.TableStorage
             }
 
             entity.Add("RawData", rawData);
-            entity.Add("TypeName", eventType.Name);
-            entity.Add("TypeFullName", eventType.FullName);
+            entity.Add("TypeName", dataRecordType.Name);
+            entity.Add("TypeFullName", dataRecordType.FullName);
 
-            foreach (var property in eventType.GetProperties()
+            foreach (var property in dataRecordType.GetProperties()
                          .Where(p => p.PropertyType.IsClass == false || p.PropertyType == typeof(string)))
             {
                 var name = entity.ContainsKey(property.Name) ? $"prop_{property.Name}" : property.Name;
@@ -55,7 +55,7 @@ namespace bramvandenbussche.readwiser.api.DataAccess.TableStorage
             return entity;
         }
 
-        public async Task<IDataRecord> Deserialize(TableEntity entity, Type eventType)
+        public async Task<IDataRecord> Deserialize(TableEntity entity, Type dataRecordType)
         {
             var rawData = (string)entity["RawData"];
             if (rawData.StartsWith("Ref|"))
@@ -63,7 +63,7 @@ namespace bramvandenbussche.readwiser.api.DataAccess.TableStorage
                 var reference = rawData.Substring(4);
                 rawData = await _storeBigThings.GetBigString(reference);
             }
-            return ((IDataRecord)JsonSerializer.Deserialize(rawData, eventType, Options)!);
+            return ((IDataRecord)JsonSerializer.Deserialize(rawData, dataRecordType, Options)!);
         }
     }
 }
