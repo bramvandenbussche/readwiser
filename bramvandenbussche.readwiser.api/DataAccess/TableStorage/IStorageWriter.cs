@@ -9,6 +9,6 @@ public interface IStorageWriter
 
 public interface IStorageReader
 {
-    Task<IDataRecord[]> GetOrderedNotes(string[] partitionKeyValues, params Type[] noteTypes);
+    Task<IDataRecord[]> GetOrderedNotes(string[] partitionKeyValues, params Type[] recordTypes);
     Task<IDataRecord[]> GetOrderedNotes(string[] partitionKeyValues, DateTimeOffset startTime, params Type[] noteTypes);
 }

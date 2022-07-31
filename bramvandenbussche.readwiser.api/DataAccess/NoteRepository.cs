@@ -33,11 +33,3 @@ public class NoteRepository : INoteRepository
         return _writer.Write(dataRecord);
     }
 }
-
-public interface INoteRepository
-{
-    public Task<IEnumerable<Highlight>> GetAll();
-    public Task<IEnumerable<Highlight>> GetForBook(string title, string author);
-
-    public Task Save(IDataRecord dataRecord);
-}
