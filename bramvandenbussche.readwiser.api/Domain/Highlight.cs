@@ -1,4 +1,6 @@
-﻿namespace bramvandenbussche.readwiser.api.Domain;
+﻿using System.Text.RegularExpressions;
+
+namespace bramvandenbussche.readwiser.api.Domain;
 
 public class Highlight : AbstractDataRecord
 {
@@ -29,6 +31,10 @@ public class Highlight : AbstractDataRecord
 
     public override string PartitionKey => GetPartitionKey(Title, Author);
 
-    public static string GetPartitionKey(string title, string author) =>
-        $"{author.ToLower().Replace(" ", "_")}-{title.ToLower().Replace(" ", "_")}";
+    public static string GetPartitionKey(string title, string author)
+    {
+        var rgx = new Regex("[^a-zA-Z]");
+
+        return $"{rgx.Replace(author.ToLower().Replace(" ", "_"), "")}-{rgx.Replace(title.ToLower().Replace(" ", "_"), "")}";
+    }
 }

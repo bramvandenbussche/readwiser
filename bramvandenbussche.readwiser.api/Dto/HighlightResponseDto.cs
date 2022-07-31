@@ -2,7 +2,7 @@
 
 public class HighlightResponseDto
 {
-    public List<BookDto> Books { get; set; }
+    public List<BookDto> Books { get; set; } = new();
 
     public class BookDto
     {
