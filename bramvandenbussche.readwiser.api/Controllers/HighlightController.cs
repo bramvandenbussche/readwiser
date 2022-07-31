@@ -23,9 +23,9 @@ namespace bramvandenbussche.readwiser.api.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<ActionResult> GetAll()
+        public async Task<ActionResult> GetAll(int timestamp = 0)
         {
-            var data = await _repository.GetAll();
+            var data = await _repository.GetAll(timestamp);
 
             return Ok(data.ToDto());
         }

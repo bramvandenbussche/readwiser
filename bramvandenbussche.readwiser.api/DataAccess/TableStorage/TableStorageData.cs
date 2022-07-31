@@ -26,9 +26,8 @@ namespace bramvandenbussche.readwiser.api.DataAccess.TableStorage
 
         public Task<IDataRecord[]> GetOrderedNotes(string[] partitionKeyValues, params Type[] recordTypes) =>
             GetOrderedNotes(partitionKeyValues, null, recordTypes);
-
-
         
+
         public async Task<IDataRecord[]> GetOrderedNotes(string[] partitionKeyValues, DateTimeOffset? atSpecificTimeUtc,
             params Type[] recordTypes)
         {
@@ -36,7 +35,7 @@ namespace bramvandenbussche.readwiser.api.DataAccess.TableStorage
 
             var filter = string.Join(" or ", partitionKeyValues.Select(p => $"(PartitionKey eq '{p}')"));
             var timeFilter = atSpecificTimeUtc.HasValue
-                ? $" and (Timestamp lt datetime'{atSpecificTimeUtc.Value.ToString(TableStorageData.DateTimeFormat)}')"
+                ? $" and (Timestamp gt datetime'{atSpecificTimeUtc.Value.ToString(TableStorageData.DateTimeFormat)}')"
                 : "";
             if (filter != "") filter = $"({filter}) and ";
 
@@ -74,7 +73,7 @@ namespace bramvandenbussche.readwiser.api.DataAccess.TableStorage
             
 
             return result
-                .Where(x => !atSpecificTimeUtc.HasValue || x.RaisedTime <= atSpecificTimeUtc)
+                .Where(x => !atSpecificTimeUtc.HasValue || x.RaisedTime >= atSpecificTimeUtc)
                 .OrderBy(x => x.RaisedTime).ToArray();
         }
 

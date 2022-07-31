@@ -14,9 +14,13 @@ public class NoteRepository : INoteRepository
         _writer = writer;
     }
 
-    public async Task<IEnumerable<Highlight>> GetAll()
+    public async Task<IEnumerable<Highlight>> GetAll(int timestamp)
     {
-        var data = await _reader.GetOrderedNotes(new string[]{ }, typeof(Highlight));
+        IDataRecord[] data;
+        if (timestamp > 0)
+            data = await _reader.GetOrderedNotes(new string[] { }, DateTimeOffset.FromUnixTimeSeconds(timestamp), typeof(Highlight));
+        else
+            data = await _reader.GetOrderedNotes(new string[] { }, typeof(Highlight));
 
         return data.Select(d => d as Highlight)!;
     }
