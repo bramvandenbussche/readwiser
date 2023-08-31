@@ -1,7 +1,6 @@
-﻿using bramvandenbussche.readwiser.api.DataAccess.TableStorage;
-using bramvandenbussche.readwiser.api.Domain;
+﻿using bramvandenbussche.readwiser.api.Domain;
 
-namespace bramvandenbussche.readwiser.api.DataAccess;
+namespace bramvandenbussche.readwiser.api.DataAccess.TableStorage;
 
 public class NoteRepository : INoteRepository
 {

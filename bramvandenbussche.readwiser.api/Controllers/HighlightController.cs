@@ -39,7 +39,7 @@ namespace bramvandenbussche.readwiser.api.Controllers
             return Ok(data.ToDto());
         }
 
-        [HttpPost()]
+        [HttpPost]
         [Authorize]
         public async Task<ActionResult> AddNewHighlight([FromBody] CreateHighlightRequestDto request)
         {
