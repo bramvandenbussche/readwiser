@@ -24,6 +24,5 @@ public class TableStorageConfiguration : IStorageAccountSettings
     public TableStorageConfiguration(IConfiguration configuration)
     {
         ConnectionString = configuration["DataStore:TableStorage.ConnectionString"];
-;
     }
 }
