@@ -1,0 +1,59 @@
+version: '3'
+
+name: readwiser
+
+services:
+
+  api:
+    build: .
+    container_name: api
+    environment:
+      "DataStore:TableStorage.ConnectionString": DefaultEndpointsProtocol=http;AccountName=readwiser;AccountKey=NWkzd2c3OGk5YWg3N3BmNDh6MjlkMnM4anA3N244bmU=;BlobEndpoint=http://azurite:10000/readwiser;TableEndpoint=http://azurite:10002/readwiser;
+      "ApiKey": "zf496N7o5Sq8sCagvxS99ReRp9QCj8f2MteGwhNfk9NMhCk9"
+
+    #volumes:
+      #- ./:/srv/jekyll
+    ports:
+      - 5113:80
+      - 7113:443
+
+  #mongo:
+  #  image: mongo
+  #  container_name: mongo
+  #  restart: always
+  #  environment:
+  #    MONGO_INITDB_ROOT_USERNAME: root
+  #    MONGO_INITDB_ROOT_PASSWORD: example
+
+
+  #mongo-express:
+  #  image: mongo-express
+  #  container_name: mongo-express
+  #  restart: always
+  #  ports:
+  #    - 8084:8081
+  #  environment:
+  #    ME_CONFIG_MONGODB_ADMINUSERNAME: root
+  #    ME_CONFIG_MONGODB_ADMINPASSWORD: example
+  #    ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
+
+  # Documentation: https://github.com/Azure/Azurite/blob/main/README.md
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite
+    container_name: azurite
+    restart: unless-stopped
+    
+    environment:
+      tableHost: 0.0.0.0
+      blobHost: 0.0.0.0
+      AZURITE_ACCOUNTS: "readwiser:NWkzd2c3OGk5YWg3N3BmNDh6MjlkMnM4anA3N244bmU="
+
+    volumes:
+      - ./data:/workspace
+
+    ports:
+      - 10000:10000
+      - 10002:10002
+      #- 7777:7777
+      #- 8888:8888
+      #- 9999:9999

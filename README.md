@@ -97,3 +97,13 @@ In order to download the data from your API into Calibre, you first need to inst
 - If annotations are found, you'll get the default import dialog showing all books for which annotations are found
   - If no annotations are found, you'll get a message telling you so
 - After this you can **preview** the annotations, **select** which books to import for and eventually click **Import Annotations**
+
+## Development
+
+### Docker
+
+To run the application in Docker, using a local version of Azure Table Storage, also running in Docker, use the following command:
+
+``` powershell
+docker build .; docker compose up
+```
