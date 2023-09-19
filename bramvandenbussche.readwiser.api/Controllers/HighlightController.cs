@@ -11,21 +11,21 @@ namespace bramvandenbussche.readwiser.api.Controllers
     [Route("api/[controller]")]
     public class HighlightController : ControllerBase
     {
-        private readonly INoteRepository _repository;
+        private readonly IHighlightService _service;
 
         private readonly ILogger<HighlightController> _logger;
 
-        public HighlightController(ILogger<HighlightController> logger, INoteRepository repository)
+        public HighlightController(ILogger<HighlightController> logger, IHighlightService service)
         {
             _logger = logger;
-            _repository = repository;
+            _service = service;
         }
 
         [HttpGet]
         [Authorize]
         public async Task<ActionResult> GetAll(int timestamp = 0)
         {
-            var data = await _repository.GetAll(timestamp);
+            var data = await _service.GetAll(timestamp);
 
             return Ok(data.ToDto());
         }
@@ -34,7 +34,7 @@ namespace bramvandenbussche.readwiser.api.Controllers
         [Authorize]
         public async Task<ActionResult> GetHighlightsForBook(string title, string author)
         {
-            var data = await _repository.GetForBook(title, author);
+            var data = await _service.GetForBook(title, author);
 
             return Ok(data.ToDto());
         }
@@ -43,26 +43,24 @@ namespace bramvandenbussche.readwiser.api.Controllers
         [Authorize]
         public async Task<ActionResult> AddNewHighlight([FromBody] CreateHighlightRequestDto request)
         {
-            var cache = new Dictionary<string, List<Highlight>>();
-            var makeKey = (string author, string title) => $"{author}-{title}";
-            
-            foreach (var note in request.Highlights)
+            try
             {
-                var key = makeKey(note.Author, note.Title);
-                if (!cache.ContainsKey(key))
-                {
-                    var data = await _repository.GetForBook(note.Title, note.Author);
-                    cache.Add(key, data.ToList());
-                }
-
-                // Prevent duplicates
-                if (!cache[key].Any(x => x.Chapter == note.Chapter && x.Text == note.Text))
-                {
-                    var value = note.ToDomain();
-                    cache[key].Add(value);
-                    await _repository.Save(value);
-                }
+                await _service.Add(request.Highlights);
             }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            
+
+            return Ok();
+        }
+
+        [HttpPost("migrate")]
+        [Authorize]
+        public async Task<ActionResult> MigrateStorage([FromBody] string source)
+        {
 
             return Ok();
         }
