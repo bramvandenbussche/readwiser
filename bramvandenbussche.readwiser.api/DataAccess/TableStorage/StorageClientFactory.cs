@@ -19,6 +19,11 @@ namespace bramvandenbussche.readwiser.api.DataAccess.TableStorage
             _tableServiceClient = new TableServiceClient(_settings.ConnectionString);
         }
 
+        public StorageClientFactory(string connectionString)
+        {
+            _tableServiceClient = new TableServiceClient(connectionString);
+        }
+
         public Task<TableClient> GetTableClient(string tableName)
         {
             return Task.FromResult(_tableClients.GetOrAdd(tableName, name =>
