@@ -14,4 +14,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\bramvandenbussche.readwiser.data.tablestorage\bramvandenbussche.readwiser.data.tablestorage.csproj" />
+    <ProjectReference Include="..\bramvandenbussche.readwiser.domain\bramvandenbussche.readwiser.domain.csproj" />
+  </ItemGroup>
+
 </Project>

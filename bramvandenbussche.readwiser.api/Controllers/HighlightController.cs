@@ -1,9 +1,9 @@
 using System.Text.Json;
-using bramvandenbussche.readwiser.api.DataAccess;
-using bramvandenbussche.readwiser.api.Domain;
-using bramvandenbussche.readwiser.api.Dto;
+using bramvandenbussche.readwiser.api.Contract;
+using bramvandenbussche.readwiser.domain.Interface.Business;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace bramvandenbussche.readwiser.api.Controllers
 {
@@ -15,6 +15,7 @@ namespace bramvandenbussche.readwiser.api.Controllers
         private readonly INoteMigrationService _migrationService;
 
         private readonly ILogger<HighlightController> _logger;
+        private readonly MemoryCache _cache = new(new MemoryCacheOptions());
 
         public HighlightController(IHighlightService service, INoteMigrationService migrationService, ILogger<HighlightController> logger)
         {
@@ -31,7 +32,7 @@ namespace bramvandenbussche.readwiser.api.Controllers
             var data = await _service.GetAll(timestamp);
 
             _logger.LogInformation($"{nameof(GetAll)}: Returned {data.Count()} notes");
-            return Ok(data.ToDto());
+            return Ok(data.ToApiContract());
         }
 
         [HttpGet("book")]
@@ -42,7 +43,7 @@ namespace bramvandenbussche.readwiser.api.Controllers
             var data = await _service.GetForBook(title, author);
 
             _logger.LogInformation($"{nameof(GetHighlightsForBook)}: Returned {data.Count()} notes");
-            return Ok(data.ToDto());
+            return Ok(data.ToApiContract());
         }
 
         [HttpPost]
@@ -52,7 +53,7 @@ namespace bramvandenbussche.readwiser.api.Controllers
             _logger.LogDebug($"{nameof(AddNewHighlight)}: Request received containing {request.Highlights.Count} notes. First book: {request.Highlights[0].Author} - {request.Highlights[0].Title}");
             try
             {
-                await _service.Add(request.Highlights);
+                await _service.Add(request.Highlights.ToDomain());
                 _logger.LogInformation($"{nameof(AddNewHighlight)}: Saved {request.Highlights.Count} notes");
             }
             catch (Exception e)
