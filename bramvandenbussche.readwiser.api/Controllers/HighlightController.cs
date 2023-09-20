@@ -29,10 +29,18 @@ namespace bramvandenbussche.readwiser.api.Controllers
         public async Task<ActionResult> GetAll(int timestamp = 0)
         {
             _logger.LogDebug($"{nameof(GetAll)}: Request received with timestamp: {timestamp}");
-            var data = await _service.GetAll(timestamp);
+            try
+            {
+                var data = await _service.GetAll(timestamp);
 
-            _logger.LogInformation($"{nameof(GetAll)}: Returned {data.Count()} notes");
-            return Ok(data.ToApiContract());
+                _logger.LogInformation($"{nameof(GetAll)}: Returned {data.Count()} notes");
+                return Ok(data.ToApiContract());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         [HttpGet("book")]
@@ -48,9 +56,13 @@ namespace bramvandenbussche.readwiser.api.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult> AddNewHighlight([FromBody] CreateHighlightRequestDto request)
+        public async Task<ActionResult> AddNewHighlight([FromBody] CreateHighlightRequest request)
         {
             _logger.LogDebug($"{nameof(AddNewHighlight)}: Request received containing {request.Highlights.Count} notes. First book: {request.Highlights[0].Author} - {request.Highlights[0].Title}");
+            
+            if (!request.IsValid)
+                return BadRequest("Invalid request object");
+
             try
             {
                 await _service.Add(request.Highlights.ToDomain());
@@ -71,6 +83,10 @@ namespace bramvandenbussche.readwiser.api.Controllers
         public async Task<ActionResult> MigrateStorage([FromBody] MigrateNotesRequest source)
         {
             _logger.LogDebug($"{nameof(MigrateStorage)}: Request received with timestamp: {source.Timestamp}");
+
+            if (!source.IsValid)
+                return BadRequest("Invalid request object");
+
             var result = await _migrationService.ImportAll(source.SourceConnection, source.Timestamp);
 
             if (result.IsSucces)

@@ -4,7 +4,7 @@ namespace bramvandenbussche.readwiser.api.Contract;
 
 public static class ContractExtensions
 {
-    public static Highlight ToDomain(this CreateHighlightRequestDto.HighlightDto dto)
+    public static Highlight ToDomain(this CreateHighlightRequest.HighlightDto dto)
     {
         return new Highlight()
         {
@@ -18,5 +18,5 @@ public static class ContractExtensions
         };
     }
 
-    public static IEnumerable<Highlight> ToDomain(this IEnumerable<CreateHighlightRequestDto.HighlightDto> dto) => dto.Select(ToDomain);
+    public static IEnumerable<Highlight> ToDomain(this IEnumerable<CreateHighlightRequest.HighlightDto> dto) => dto.Select(ToDomain);
 }

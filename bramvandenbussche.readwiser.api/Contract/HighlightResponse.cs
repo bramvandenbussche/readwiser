@@ -1,7 +1,9 @@
 ﻿namespace bramvandenbussche.readwiser.api.Contract;
 
-public sealed class HighlightResponseDto : ApiResponse
+public sealed class HighlightResponse : ApiResponse
 {
+    public HighlightResponse(string reason = "") : base(reason) { }
+
     public List<BookDto> Books { get; set; } = new();
 
     public class BookDto

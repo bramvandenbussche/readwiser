@@ -54,7 +54,13 @@ namespace bramvandenbussche.readwiser.data.tablestorage
                 var tableEntities =
                     await _cache.GetOrCreateAsync(tableEntityCacheKey, _ => Task.FromResult(new ConcurrentDictionary<string, TableEntity>()));
 
+                if (tableEntities == null)
+                    throw new NullReferenceException($"No valid {nameof(tableEntities)} object received from cache or factory method");
+
                 var records = await _cache.GetOrCreateAsync(recordsCacheKey, entry => Task.FromResult(new ConcurrentDictionary<string, IDataRecord>()));
+
+                if (records == null)
+                    throw new NullReferenceException($"No valid {nameof(records)} object received from cache or factory method");
 
                 var latestCachedRecordTime = tableEntities.Any() ? tableEntities.Values.Max(x => x.Timestamp.GetValueOrDefault()) : new DateTime(1601, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 

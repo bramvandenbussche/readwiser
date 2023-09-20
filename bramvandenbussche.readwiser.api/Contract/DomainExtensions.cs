@@ -4,13 +4,13 @@ namespace bramvandenbussche.readwiser.api.Contract;
 
 public static class DomainExtensions
 {
-    public static HighlightResponseDto ToApiContract(this IEnumerable<Highlight> data)
+    public static HighlightResponse ToApiContract(this IEnumerable<Highlight> data)
     {
-        return new HighlightResponseDto()
+        return new HighlightResponse()
         {
             Books = data
                 .GroupBy(x => new { x.Author, x.Title })
-                .Select(x => new HighlightResponseDto.BookDto()
+                .Select(x => new HighlightResponse.BookDto()
                 {
                     Id = Guid.NewGuid(),
                     Author = x.Key.Author,
@@ -21,9 +21,9 @@ public static class DomainExtensions
         };
     }
 
-    public static HighlightResponseDto.HighlightDto ToApiContract(this Highlight data)
+    public static HighlightResponse.HighlightDto ToApiContract(this Highlight data)
     {
-        return new HighlightResponseDto.HighlightDto()
+        return new HighlightResponse.HighlightDto()
         {
             Id = data.NoteId,
             HighlightText = data.Text,

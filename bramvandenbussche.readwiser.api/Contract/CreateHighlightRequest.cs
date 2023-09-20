@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace bramvandenbussche.readwiser.api.Contract;
 
-public class CreateHighlightRequestDto
+public class CreateHighlightRequest : IApiRequest
 {
     public List<HighlightDto> Highlights { get; set; } = new();
 
@@ -80,4 +80,6 @@ public class CreateHighlightRequestDto
 
         public string? Chapter { get; set; }
     }
+
+    public bool IsValid => true;
 }
