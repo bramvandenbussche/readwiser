@@ -1,10 +1,8 @@
-# ReadWiser
-
-[![Build and deploy ASP.Net Core app to Azure Web App - readwiser-api](https://github.com/bramvandenbussche/readwiser/actions/workflows/master_readwiser-api.yml/badge.svg?branch=master)](https://github.com/bramvandenbussche/readwiser/actions/workflows/master_readwiser-api.yml)
+# Readwiser
 
 ## Description
 
-ReadWiser is a tool to sync book highlights and annotations from [MoonReader](https://play.google.com/store/apps/details?id=com.flyersoft.moonreaderp&hl=nl&gl=US) (the best e-reader for Android) to [Calibre](https://calibre-ebook.com/). I looked high and low for a solution to this and since I couldn't find any, I decided to build my own.
+Readwiser is a tool to sync book highlights and annotations from [MoonReader](https://play.google.com/store/apps/details?id=com.flyersoft.moonreaderp&hl=nl&gl=US) (the best e-reader for Android) to [Calibre](https://calibre-ebook.com/). I looked high and low for a solution to this and since I couldn't find any, I decided to build my own.
 
 > It uses the fact that MoonReader integrates with the Readwise API and allows you to change the API endpoint
 
@@ -24,18 +22,33 @@ Before you start, generate a secure token to protect your API from unwanted call
 
 > ⚠️ Keep this value secret.
 
-### ReadWiser API
+### Readwiser API
 
-- Deploy the API somewhere, an Azure WebApp will do (and can be had for free!)
-- Configure an Azure Storage Account resource
-- Add the following configuration variables to your website:
+You can run the Readwiser API via Docker by using this docker-compose.yml file:
 
-| Key                                         | Description                                                                  |
-| ------------------------------------------- | ---------------------------------------------------------------------------- |
-| `DataStore__TableStorage.ConnectionString` | with the ConnectionString to your Table Storage resource                     |
-| `ApiKey`                                    | The secure token you generated |
-| `APPINSIGHTS_INSTRUMENTATIONKEY`            | Optional: Your Application Insights InstrumentationKey                       |
-| `APPLICATIONINSIGHTS_CONNECTION_STRING`     | Optional: Application Insights ConnectionString                              |
+```docker-compose
+
+name: readwiser
+services:
+
+  api:
+    build: .
+    container_name: readwiser-api
+    environment:
+      "ApiKey": "<generate a random string>"
+
+    ports:
+      - 5113:80 # Pick whichever port you would like to expose
+
+  mongo:
+    container_name: mongo
+    image: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - ./mongodb_data:/data/db # Choose a location for your mongo data
+    
+```
 
 You can test that your API is running by using the request defined in [rest-client.http](docs/rest-client.http).
 
@@ -102,7 +115,7 @@ In order to download the data from your API into Calibre, you first need to inst
 
 ### Docker
 
-To run the application in Docker, using a local version of Azure Table Storage, also running in Docker, use the following command:
+To run the application in Docker, using a local version of MongoDB, also running in Docker, use the following command:
 
 ``` powershell
 docker build .; docker compose up
