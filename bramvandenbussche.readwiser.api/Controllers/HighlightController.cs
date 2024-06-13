@@ -12,16 +12,16 @@ namespace bramvandenbussche.readwiser.api.Controllers
     public class HighlightController : ControllerBase
     {
         private readonly IHighlightService _service;
-        private readonly INoteMigrationService _migrationService;
+        //private readonly INoteMigrationService _migrationService;
 
         private readonly ILogger<HighlightController> _logger;
         private readonly MemoryCache _cache = new(new MemoryCacheOptions());
 
-        public HighlightController(IHighlightService service, INoteMigrationService migrationService, ILogger<HighlightController> logger)
+        public HighlightController(IHighlightService service, ILogger<HighlightController> logger) //, INoteMigrationService migrationService)
         {
             _service = service;
             _logger = logger;
-            _migrationService = migrationService;
+            //_migrationService = migrationService;
         }
 
         [HttpGet]
@@ -38,8 +38,8 @@ namespace bramvandenbussche.readwiser.api.Controllers
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                throw;
+                _logger.LogError(e.Message, e);
+                return Problem(e.Message, statusCode: 500);
             }
         }
 
@@ -78,26 +78,26 @@ namespace bramvandenbussche.readwiser.api.Controllers
             return Ok();
         }
 
-        [HttpPost("migrate")]
-        [Authorize]
-        public async Task<ActionResult> MigrateStorage([FromBody] MigrateNotesRequest source)
-        {
-            _logger.LogDebug($"{nameof(MigrateStorage)}: Request received with timestamp: {source.Timestamp}");
+        //[HttpPost("migrate")]
+        //[Authorize]
+        //public async Task<ActionResult> MigrateStorage([FromBody] MigrateNotesRequest source)
+        //{
+        //    _logger.LogDebug($"{nameof(MigrateStorage)}: Request received with timestamp: {source.Timestamp}");
 
-            if (!source.IsValid)
-                return BadRequest("Invalid request object");
+        //    if (!source.IsValid)
+        //        return BadRequest("Invalid request object");
 
-            var result = await _migrationService.ImportAll(source.SourceConnection, source.Timestamp);
+        //    var result = await _migrationService.ImportAll(source.SourceConnection, source.Timestamp);
 
-            if (result.IsSucces)
-            {
-                _logger.LogInformation(
-                    $"{nameof(MigrateStorage)}: Migration finished. Imported {result.Notes} notes for {result.Books} books.");
-                return Ok(result);
-            }
+        //    if (result.IsSucces)
+        //    {
+        //        _logger.LogInformation(
+        //            $"{nameof(MigrateStorage)}: Migration finished. Imported {result.Notes} notes for {result.Books} books.");
+        //        return Ok(result);
+        //    }
 
-            _logger.LogError($"{nameof(MigrateStorage)}: Migration failed. Reason: {result.Reason}.");
-            return Problem(result.Reason);
-        }
+        //    _logger.LogError($"{nameof(MigrateStorage)}: Migration failed. Reason: {result.Reason}.");
+        //    return Problem(result.Reason);
+        //}
     }
 }

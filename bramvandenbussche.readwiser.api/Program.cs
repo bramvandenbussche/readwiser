@@ -47,7 +47,9 @@ if (app.Environment.IsDevelopment())
 else
 {
     // Configure the HTTP request pipeline.
-    app.UseHttpsRedirection();
+    // Let's not use this because we are running in Docker after all. 
+    // We can use SSL offloading through the reverse proxy
+    //app.UseHttpsRedirection();
 }
 
 app.UseAuthentication();
