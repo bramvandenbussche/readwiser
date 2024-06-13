@@ -34,6 +34,8 @@ services:
   api:
     image: bramvandenbussche/readwiser:latest
     container_name: readwiser-api
+    depends_on:
+      - mongo
     environment:
       "ApiKey": "<generate a random string>"
 
