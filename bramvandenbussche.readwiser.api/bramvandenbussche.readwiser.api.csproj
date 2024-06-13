@@ -16,7 +16,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\bramvandenbussche.readwiser.data.mongodb\bramvandenbussche.readwiser.data.mongodb.csproj" />
-    <ProjectReference Include="..\bramvandenbussche.readwiser.data.tablestorage\bramvandenbussche.readwiser.data.tablestorage.csproj" />
     <ProjectReference Include="..\bramvandenbussche.readwiser.domain\bramvandenbussche.readwiser.domain.csproj" />
   </ItemGroup>
 

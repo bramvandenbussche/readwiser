@@ -25,15 +25,6 @@ public static class DependencyInjection
             .WithSingletonLifetime());
 
         // Load DataAccess
-
-        //  - TableStorage
-        //services.Scan(scan => scan
-        //    .FromAssemblyOf<IStorageAccountSettings>()
-        //    .AddClasses()
-        //    .AsSelf()
-        //    .AsImplementedInterfaces()
-        //    .WithSingletonLifetime());
-
         //  - MongoDb
         services.AddMongo(configuration["DataStore:MongoDb:ConnectionString"],
             configuration["DataStore:MongoDb:Database"]);
