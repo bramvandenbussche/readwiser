@@ -1,14 +1,14 @@
-version: '3'
 
 name: readwiser
-
 services:
 
   api:
     build: .
     container_name: api
     environment:
-      "DataStore:TableStorage.ConnectionString": DefaultEndpointsProtocol=http;AccountName=readwiser;AccountKey=NWkzd2c3OGk5YWg3N3BmNDh6MjlkMnM4anA3N244bmU=;BlobEndpoint=http://azurite:10000/readwiser;TableEndpoint=http://azurite:10002/readwiser;
+      "DataStore:TableStorage.ConnectionString": "DefaultEndpointsProtocol=http;AccountName=readwiser;AccountKey=NWkzd2c3OGk5YWg3N3BmNDh6MjlkMnM4anA3N244bmU=;BlobEndpoint=http://azurite:10000/readwiser;TableEndpoint=http://azurite:10002/readwiser;"
+      "DataStore:MongoDb:ConnectionString": "mongodb://mongo:27017"
+      "DataStore:MongoDb:Database": "readwiser"
       "ApiKey": "zf496N7o5Sq8sCagvxS99ReRp9QCj8f2MteGwhNfk9NMhCk9"
 
     #volumes:
@@ -25,17 +25,14 @@ services:
   #    MONGO_INITDB_ROOT_USERNAME: root
   #    MONGO_INITDB_ROOT_PASSWORD: example
 
-
-  #mongo-express:
-  #  image: mongo-express
-  #  container_name: mongo-express
-  #  restart: always
-  #  ports:
-  #    - 8084:8081
-  #  environment:
-  #    ME_CONFIG_MONGODB_ADMINUSERNAME: root
-  #    ME_CONFIG_MONGODB_ADMINPASSWORD: example
-  #    ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
+  mongo:
+    container_name: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - ./mongodb_data:/data/db
+    image: mongo
+    
 
   # Documentation: https://github.com/Azure/Azurite/blob/main/README.md
   azurite:

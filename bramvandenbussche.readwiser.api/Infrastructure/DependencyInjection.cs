@@ -1,5 +1,6 @@
-﻿using bramvandenbussche.readwiser.data.tablestorage.Interface;
+﻿using bramvandenbussche.readwiser.data.mongodb;
 using bramvandenbussche.readwiser.domain.Model;
+using MongoDB.Thin;
 
 namespace bramvandenbussche.readwiser.api.Infrastructure;
 
@@ -23,12 +24,7 @@ public static class DependencyInjection
             .AsImplementedInterfaces()
             .WithSingletonLifetime());
 
-       services.Scan(scan => scan
-           .FromAssemblyOf<Highlight>()
-           .AddClasses()
-           .AsSelf()
-           .AsImplementedInterfaces()
-           .WithSingletonLifetime());
+        // Load DataAccess
 
         //  - TableStorage
         //services.Scan(scan => scan
@@ -38,6 +34,15 @@ public static class DependencyInjection
         //    .AsImplementedInterfaces()
         //    .WithSingletonLifetime());
 
+        //  - MongoDb
+        services.AddMongo(configuration["DataStore:MongoDb:ConnectionString"],
+            configuration["DataStore:MongoDb:Database"]);
+        services.Scan(scan => scan
+            .FromAssemblyOf<MongoDbNoteRepository>()
+            .AddClasses()
+            .AsSelf()
+            .AsImplementedInterfaces()
+            .WithSingletonLifetime());
 
 
     }

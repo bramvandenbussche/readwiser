@@ -13,11 +13,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bramvandenbussche.readwiser.domain", "bramvandenbussche.readwiser.domain\bramvandenbussche.readwiser.domain.csproj", "{E68BA422-02D3-4B5B-ADD5-88B462493F05}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bramvandenbussche.readwiser.domain", "bramvandenbussche.readwiser.domain\bramvandenbussche.readwiser.domain.csproj", "{E68BA422-02D3-4B5B-ADD5-88B462493F05}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bramvandenbussche.readwiser.data.tablestorage", "bramvandenbussche.readwiser.data.tablestorage\bramvandenbussche.readwiser.data.tablestorage.csproj", "{EF51901C-DF07-4D30-B66E-0A5B323A8C08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bramvandenbussche.readwiser.data.tablestorage", "bramvandenbussche.readwiser.data.tablestorage\bramvandenbussche.readwiser.data.tablestorage.csproj", "{EF51901C-DF07-4D30-B66E-0A5B323A8C08}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bramvandenbussche.readwiser.api.tests", "bramvandenbussche.readwiser.api.tests\bramvandenbussche.readwiser.api.tests.csproj", "{7381B1B8-2A59-4A72-A485-EA6FF57074D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bramvandenbussche.readwiser.api.tests", "bramvandenbussche.readwiser.api.tests\bramvandenbussche.readwiser.api.tests.csproj", "{7381B1B8-2A59-4A72-A485-EA6FF57074D2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bramvandenbussche.readwiser.data.mongodb", "bramvandenbussche.readwiser.data.mongodb\bramvandenbussche.readwiser.data.mongodb.csproj", "{CEB8468F-E7CC-478C-BEF7-DB02300123B2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 		{7381B1B8-2A59-4A72-A485-EA6FF57074D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7381B1B8-2A59-4A72-A485-EA6FF57074D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7381B1B8-2A59-4A72-A485-EA6FF57074D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEB8468F-E7CC-478C-BEF7-DB02300123B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEB8468F-E7CC-478C-BEF7-DB02300123B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEB8468F-E7CC-478C-BEF7-DB02300123B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEB8468F-E7CC-478C-BEF7-DB02300123B2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

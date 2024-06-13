@@ -37,7 +37,7 @@ public class NoteRepository : INoteRepository
         return data.Select(d => d as Highlight)!;
     }
 
-    public Task Save(IDataRecord dataRecord)
+    public Task Save(Highlight dataRecord)
     {
         return _writer.Write(dataRecord);
     }

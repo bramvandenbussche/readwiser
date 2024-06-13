@@ -20,19 +20,11 @@ public class HighlightService : IHighlightService
     }
 
     public async Task<IEnumerable<Highlight>> GetAll(int timestamp)
-    {
-        var data = await _repository.GetAll(timestamp);
+        => await _repository.GetAll(timestamp);
 
-        return data;
-    }
+    public async Task<IEnumerable<Highlight>> GetForBook(string title, string author) 
+        => await _repository.GetForBook(title, author);
 
-    public async Task<IEnumerable<Highlight>> GetForBook(string title, string author)
-    {
-        var data = await _repository.GetForBook(title, author);
-
-        return data;
-    }
-    
     public async Task Add(IEnumerable<Highlight> notes)
     {
         // The cache is used to store the data already in storage for the books mentioned in the input
@@ -52,9 +44,8 @@ public class HighlightService : IHighlightService
             // Prevent duplicates
             if (!cache[key].Any(x => x.Chapter == note.Chapter && x.Text == note.Text))
             {
-                var value = note;
-                cache[key].Add(value);
-                await _repository.Save(value);
+                cache[key].Add(note);
+                await _repository.Save(note);
             }
         }
     }
