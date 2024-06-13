@@ -32,7 +32,7 @@ name: readwiser
 services:
 
   api:
-    build: .
+    image: bramvandenbussche/readwiser:latest
     container_name: readwiser-api
     environment:
       "ApiKey": "<generate a random string>"
