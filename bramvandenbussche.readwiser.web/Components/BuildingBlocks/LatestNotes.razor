@@ -1,0 +1,27 @@
+﻿@using bramvandenbussche.readwiser.domain.Model
+@using bramvandenbussche.readwiser.domain.Interface.Business
+@inject IHighlightService Service
+
+<h3>Latest Notes</h3>
+
+@if (_recentNotes == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    @foreach (var note in _recentNotes)
+    {
+        <SingleNote Highlight="@note" ShowBookDetails="true" />
+    }
+}
+
+
+@code {
+    private Highlight[]? _recentNotes;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _recentNotes = (await Service.GetRecentHighlights(5)).ToArray();
+    }
+}

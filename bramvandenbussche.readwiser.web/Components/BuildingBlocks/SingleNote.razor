@@ -1,0 +1,69 @@
+﻿@using bramvandenbussche.readwiser.domain.Model
+@using Humanizer
+
+@if (Highlight != null)
+{
+
+    <div class="card border-dark mb-3">
+        @if (ShowBookDetails)
+        {
+            @* <div class="card-header"><a href="/authors/@Highlight.Author">@Highlight.Author</a> - @Highlight.Title</div> *@
+            <div class="card-header">
+                <h5 class="card-title">
+                    @Highlight.Title
+                    <small>(by <a href="/authors/@Highlight.Author">@Highlight.Author</a>)</small>
+                </h5>
+                <h6 class="card-subtitle text-muted">@Highlight.Chapter</h6>
+            </div>
+        }
+        else
+        {
+            <div class="card-header">
+                <h6 class="card-subtitle text-muted">
+                    @FormatChapter(Highlight.Chapter)
+                </h6>
+            </div>
+        }
+        
+        <div class="card-body">
+            <blockquote class="blockquote">
+                @Highlight.Text
+            </blockquote>
+        </div>
+
+        @if (!string.IsNullOrEmpty(@Highlight.Note))
+        {
+            <div class="card-body bg-light text-black">
+                <em>@Highlight.Note</em>
+            </div>
+        }
+
+        <div class="card-footer text-muted">
+            <small title="@Highlight.RaisedTime.ToString("dddd dd MMMM yyyy HH:mm:ss")">Created @Highlight.RaisedTime.Humanize()</small>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public Highlight? Highlight { get; set; }
+
+    [Parameter]
+    public bool ShowBookDetails { get; set; } = false;
+
+    private string FormatChapter(string? chapter)
+    {
+        if (string.IsNullOrEmpty(chapter))
+        {
+            return "No chapter";
+        }
+
+        if (chapter.Length < 4)
+        {
+            return $"Chapter {chapter}";
+        }
+
+        return chapter;
+    }
+
+}

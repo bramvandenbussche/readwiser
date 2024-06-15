@@ -1,0 +1,11 @@
+﻿@page "/authors"
+@using bramvandenbussche.readwiser.domain.Interface.Business
+@using bramvandenbussche.readwiser.web.Components.BuildingBlocks
+@attribute [StreamRendering]
+@inject IHighlightService Service
+
+<PageTitle>Authors</PageTitle>
+
+<p>List of authors with books that have notes</p>
+
+<AuthorList />

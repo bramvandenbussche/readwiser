@@ -1,0 +1,35 @@
+﻿@using bramvandenbussche.readwiser.domain.Interface.Business
+@attribute [StreamRendering]
+@inject IHighlightService Service
+
+@if (_authors == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var author in _authors)
+        {
+            <tr>
+                <td><a href="/authors/@author">@author</a></td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+    private string[]? _authors;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _authors = (await Service.GetAllAuthors()).ToArray();
+    }
+}

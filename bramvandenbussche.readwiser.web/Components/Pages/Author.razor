@@ -1,0 +1,76 @@
+﻿@page "/authors/{name}"
+@rendermode InteractiveServer
+
+@using bramvandenbussche.readwiser.domain.Interface.Business
+@using bramvandenbussche.readwiser.domain.Model
+@using bramvandenbussche.readwiser.web.Components.BuildingBlocks
+
+@attribute [StreamRendering]
+@inject IHighlightService Service
+
+
+<PageTitle>Author: @Name</PageTitle>
+
+<h1>Author: @Name</h1>
+
+@if (_books == null)
+{
+    <p><em>Loading data...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th># Notes</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var book in _books)
+        {
+            var currentBook = book;
+            <tr>
+                <td @onclick="@(() => SelectBook(currentBook))" style="cursor: pointer;">
+                    @book.Title
+                </td>
+                <td>@book.Highlights.Count()</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+
+    <hr />
+}
+
+@if (_selectedBook != null)
+{
+    <h2>@_selectedBook.Title</h2>
+
+    @foreach (var note in _selectedBook.Highlights)
+    {
+        <SingleNote Highlight="@note" />
+    }
+}
+
+@code {
+    private Book[]? _books;
+
+    private Book? _selectedBook;
+
+    [Parameter]
+    public string? Name { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Name == null) return;
+
+        _books = (await Service.GetBooksForAuthor(Name)).ToArray();
+        _selectedBook = _books.Last();
+    }
+
+    void SelectBook(Book book)
+    {
+        _selectedBook = book;
+    }
+}
