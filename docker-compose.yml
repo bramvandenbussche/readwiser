@@ -2,27 +2,35 @@
 name: readwiser
 services:
 
-  api:
-    build: .
-    container_name: readwiser-api
+  web:
+    # build: bramvandenbussche.readwiser.web/.
+    image: readwiser-web
+    container_name: web
+    depends_on:
+      - mongo
+
     environment:
       "DataStore:MongoDb:ConnectionString": "mongodb://mongo:27017"
       "DataStore:MongoDb:Database": "readwiser"
       "ApiKey": "zf496N7o5Sq8sCagvxS99ReRp9QCj8f2MteGwhNfk9NMhCk9"
 
     ports:
-      - 5113:80
-      - 7113:443
+      - 5114:8080
 
-  web:
-    build: ./ReadWiser.Web
-    container_name: readwiser-web
+  api:
+    # build: bramvandenbussche.readwiser.api/.
+    image: readwiser-api
+    container_name: api
+    depends_on:
+      - mongo
+
     environment:
       "DataStore:MongoDb:ConnectionString": "mongodb://mongo:27017"
       "DataStore:MongoDb:Database": "readwiser"
+      "ApiKey": "zf496N7o5Sq8sCagvxS99ReRp9QCj8f2MteGwhNfk9NMhCk9"
 
     ports:
-      - 5114:80
+      - 5113:8080
 
 
   mongo:

@@ -8,8 +8,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{89F6A4FC-6CCA-44E7-86C1-696903F16B91}"
 	ProjectSection(SolutionItems) = preProject
 		.dockerignore = .dockerignore
+		build.bat = build.bat
 		docker-compose.yml = docker-compose.yml
-		Dockerfile = Dockerfile
 		.github\workflows\master_readwiser-api.yml = .github\workflows\master_readwiser-api.yml
 		README.md = README.md
 	EndProjectSection
@@ -20,7 +20,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bramvandenbussche.readwiser
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bramvandenbussche.readwiser.data.mongodb", "bramvandenbussche.readwiser.data.mongodb\bramvandenbussche.readwiser.data.mongodb.csproj", "{CEB8468F-E7CC-478C-BEF7-DB02300123B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bramvandenbussche.readwiser.web", "bramvandenbussche.readwiser.web\bramvandenbussche.readwiser.web.csproj", "{4D8A41D5-D967-4316-B915-FD193118A679}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bramvandenbussche.readwiser.web", "bramvandenbussche.readwiser.web\bramvandenbussche.readwiser.web.csproj", "{4D8A41D5-D967-4316-B915-FD193118A679}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

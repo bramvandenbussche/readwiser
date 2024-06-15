@@ -1,7 +1,11 @@
 using bramvandenbussche.readwiser.web.Components;
 using bramvandenbussche.readwiser.web.Infrastructure;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
+
+CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
+CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
 
 // Add services to the container.
 builder.Services
