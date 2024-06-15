@@ -12,16 +12,14 @@ namespace bramvandenbussche.readwiser.api.Controllers
     public class HighlightController : ControllerBase
     {
         private readonly IHighlightService _service;
-        //private readonly INoteMigrationService _migrationService;
 
         private readonly ILogger<HighlightController> _logger;
         private readonly MemoryCache _cache = new(new MemoryCacheOptions());
 
-        public HighlightController(IHighlightService service, ILogger<HighlightController> logger) //, INoteMigrationService migrationService)
+        public HighlightController(IHighlightService service, ILogger<HighlightController> logger)
         {
             _service = service;
             _logger = logger;
-            //_migrationService = migrationService;
         }
 
         [HttpGet]
