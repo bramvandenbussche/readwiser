@@ -46,5 +46,15 @@ namespace bramvandenbussche.readwiser.data.mongodb
 
             await _noteCollection.InsertOneAsync(newNote);
         }
+
+        public async Task<IEnumerable<string>> GetAllAuthors()
+            => await _noteCollection.Distinct(x => x.Author, _ => true).ToListAsync();
+
+        public async Task<IEnumerable<Highlight>> GetNotesForAuthor(string author)
+        {
+            var data = await _noteCollection.Find(x => x.Author == author).ToListAsync();
+
+            return data.Select(note => note.AsDomain());
+        }
     }
 }

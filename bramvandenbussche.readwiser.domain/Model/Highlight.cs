@@ -1,8 +1,9 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 
 namespace bramvandenbussche.readwiser.domain.Model;
 
-public class Highlight : AbstractDataRecord
+public class Highlight
 {
     /// <summary>
     /// Book title
@@ -29,12 +30,9 @@ public class Highlight : AbstractDataRecord
     /// </summary>
     public string Chapter { get; set; } = string.Empty;
 
-    public override string PartitionKey => GetPartitionKey(Title, Author);
+    public DateTimeOffset RaisedTime { get; set; } = DateTimeOffset.UtcNow;
 
-    public static string GetPartitionKey(string title, string author)
-    {
-        var rgx = new Regex("[^a-zA-Z_]");
-
-        return $"{rgx.Replace(author.ToLower().Replace(" ", "_"), "")}-{rgx.Replace(title.ToLower().Replace(" ", "_"), "")}";
-    }
+    public Guid NoteId { get; set; }
+    
+    public string SortOrder { get; set; }
 }

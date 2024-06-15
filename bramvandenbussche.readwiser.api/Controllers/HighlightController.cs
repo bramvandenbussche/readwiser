@@ -1,4 +1,4 @@
-using System.Text.Json;
+using System.ComponentModel.DataAnnotations;
 using bramvandenbussche.readwiser.api.Contract;
 using bramvandenbussche.readwiser.domain.Interface.Business;
 using Microsoft.AspNetCore.Authorization;
@@ -22,6 +22,13 @@ namespace bramvandenbussche.readwiser.api.Controllers
             _logger = logger;
         }
 
+        #region Calibre Annotations
+
+        /// <summary>
+        /// Get all highlights since the given timestamp. If timestamp is not provided, all notes will be returned.
+        /// </summary>
+        /// <param name="timestamp">Optional starting point to filter data by</param>
+        /// <returns></returns>
         [HttpGet]
         [Authorize]
         public async Task<ActionResult> GetAll(int timestamp = 0)
@@ -41,6 +48,12 @@ namespace bramvandenbussche.readwiser.api.Controllers
             }
         }
 
+        /// <summary>
+        /// Retrieve all notes for a given book (author + title)
+        /// </summary>
+        /// <param name="title">Title of the book</param>
+        /// <param name="author">Author of the book</param>
+        /// <returns></returns>
         [HttpGet("book")]
         [Authorize]
         public async Task<ActionResult> GetHighlightsForBook(string title, string author)
@@ -52,6 +65,17 @@ namespace bramvandenbussche.readwiser.api.Controllers
             return Ok(data.ToApiContract());
         }
 
+        #endregion
+
+        #region MoonReader Pro - ReadWise API
+
+        /// <summary>
+        /// Create a new highlight.
+        /// Called from MoonReader.
+        /// Implements the ReadWise API.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
         [Authorize]
         public async Task<ActionResult> AddNewHighlight([FromBody] CreateHighlightRequest request)
@@ -76,26 +100,35 @@ namespace bramvandenbussche.readwiser.api.Controllers
             return Ok();
         }
 
-        //[HttpPost("migrate")]
-        //[Authorize]
-        //public async Task<ActionResult> MigrateStorage([FromBody] MigrateNotesRequest source)
-        //{
-        //    _logger.LogDebug($"{nameof(MigrateStorage)}: Request received with timestamp: {source.Timestamp}");
+        #endregion
 
-        //    if (!source.IsValid)
-        //        return BadRequest("Invalid request object");
 
-        //    var result = await _migrationService.ImportAll(source.SourceConnection, source.Timestamp);
+        /// <summary>
+        /// Get a list of authors with notes
+        /// </summary>
+        [HttpGet("authors")]
+        public async Task<ActionResult> GetAuthors()
+        {
+            _logger.LogDebug($"{nameof(GetAuthors)}: Request received for authors");
+            var data = await _service.GetAllAuthors();
 
-        //    if (result.IsSucces)
-        //    {
-        //        _logger.LogInformation(
-        //            $"{nameof(MigrateStorage)}: Migration finished. Imported {result.Notes} notes for {result.Books} books.");
-        //        return Ok(result);
-        //    }
+            _logger.LogInformation($"{nameof(GetAuthors)}: Returned {data.Count()} authors");
+            return Ok(data);
+        }
+        
 
-        //    _logger.LogError($"{nameof(MigrateStorage)}: Migration failed. Reason: {result.Reason}.");
-        //    return Problem(result.Reason);
-        //}
+        /// <summary>
+        /// Get a list of books and notes for a given author
+        /// </summary>
+        /// <param name="name">The name of the author</param>
+        [HttpGet("author")]
+        public async Task<ActionResult> GetBooksForAuthor([FromQuery, Required] string name)
+        {
+            _logger.LogDebug($"{nameof(GetBooksForAuthor)}: Request received for authors");
+            var data = await _service.GetBooksForAuthor(name);
+
+            _logger.LogInformation($"{nameof(GetBooksForAuthor)}: Returned {data.Count()} authors");
+            return Ok(data);
+        }
     }
 }

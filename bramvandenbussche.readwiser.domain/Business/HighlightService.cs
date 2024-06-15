@@ -49,4 +49,59 @@ public class HighlightService : IHighlightService
             }
         }
     }
+
+    public async Task<IEnumerable<Book>> GetBooksForAuthor(string author)
+    {
+        var notes = await _repository.GetNotesForAuthor(author);
+
+        var books = notes
+            .GroupBy(x => x.Title)
+            .Select(x => new Book()
+            {
+                Author = x.First().Author, // or author?
+                Title = x.Key,
+                Highlights = x.Select(note => new Highlight()
+                {
+                    Text = note.Text,
+                    Chapter = note.Chapter,
+                    Note = note.Note,
+                    RaisedTime = note.RaisedTime,
+                    SortOrder = note.Chapter.FindChapterNumber()
+
+                }).OrderBy(x => x.SortOrder)
+                    .ThenBy(x => x.RaisedTime)
+                    .ToList()
+            });
+
+        return books;
+    }
+
+    public async Task<IEnumerable<string>> GetAllAuthors()
+        => await _repository.GetAllAuthors();
+
+    public async Task<IEnumerable<Book>> GetAllBooks()
+    {
+        var notes = await _repository.GetAll(0);
+
+        var books = notes
+            .GroupBy(x => x.Title)
+            .Select(x => new Book()
+            {
+                Author = x.First().Author, // or author?
+                Title = x.Key,
+                Highlights = x.Select(note => new Highlight()
+                {
+                    Text = note.Text,
+                    Chapter = note.Chapter,
+                    Note = note.Note,
+                    RaisedTime = note.RaisedTime,
+                    SortOrder = note.Chapter.FindChapterNumber()
+
+                }).OrderBy(x => x.SortOrder)
+                    .ThenBy(x => x.RaisedTime)
+                    .ToList()
+            });
+
+        return books;
+    }
 }
