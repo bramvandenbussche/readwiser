@@ -14,6 +14,17 @@ services:
       - 5113:80
       - 7113:443
 
+  web:
+    build: ./ReadWiser.Web
+    container_name: readwiser-web
+    environment:
+      "DataStore:MongoDb:ConnectionString": "mongodb://mongo:27017"
+      "DataStore:MongoDb:Database": "readwiser"
+
+    ports:
+      - 5114:80
+
+
   mongo:
     container_name: mongo
     ports:
