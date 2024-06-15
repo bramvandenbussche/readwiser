@@ -104,4 +104,9 @@ public class HighlightService : IHighlightService
 
         return books;
     }
+
+    public Task<IEnumerable<Highlight>> GetRecentHighlights(int amount)
+    {
+        return _repository.GetRecentHighlights(amount);
+    }
 }

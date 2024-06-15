@@ -37,4 +37,10 @@ public interface INoteRepository
     /// <param name="author">The author to retrieve books for</param>
     /// <returns></returns>
     public Task<IEnumerable<Highlight>> GetNotesForAuthor(string author);
+
+    /// <summary>
+    /// Retrieve a list of the most recent highlights
+    /// </summary>
+    /// <param name="amount">The amount of items to retrieve</param>
+    public Task<IEnumerable<Highlight>> GetRecentHighlights(int amount);
 }

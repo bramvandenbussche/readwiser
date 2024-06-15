@@ -56,5 +56,13 @@ namespace bramvandenbussche.readwiser.data.mongodb
 
             return data.Select(note => note.AsDomain());
         }
+
+        public async Task<IEnumerable<Highlight>> GetRecentHighlights(int amount) 
+            => (await _noteCollection
+                .Find(_ => true)
+                .SortByDescending(n => n.Timestamp)
+                .Limit(amount)
+                .ToListAsync())
+                .Select(note => note.AsDomain());
     }
 }

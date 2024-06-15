@@ -25,4 +25,10 @@ public interface IHighlightService
     /// Retrieve a list of all books for which notes exist
     /// </summary>
     public Task<IEnumerable<Book>> GetAllBooks();
+
+    /// <summary>
+    /// Retrieve a list of the most recent highlights
+    /// </summary>
+    /// <param name="amount">The amount of items to retrieve</param>
+    Task<IEnumerable<Highlight>> GetRecentHighlights(int amount);
 }
