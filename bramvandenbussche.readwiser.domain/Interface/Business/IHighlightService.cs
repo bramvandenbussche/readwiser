@@ -30,7 +30,7 @@ public interface IHighlightService
     /// Retrieve a list of the most recent highlights
     /// </summary>
     /// <param name="amount">The amount of items to retrieve</param>
-    Task<IEnumerable<Highlight>> GetRecentHighlights(int amount);
+    public Task<IEnumerable<Highlight>> GetRecentHighlights(int amount);
 
     /// <summary>
     /// Updates a highlight object.
@@ -38,5 +38,11 @@ public interface IHighlightService
     /// </summary>
     /// <param name="highlight"></param>
     /// <returns></returns>
-    Task UpdateHighlight(Highlight highlight);
+    public Task UpdateHighlight(Highlight highlight);
+
+    /// <summary>
+    /// Remove highlight from database
+    /// </summary>
+    /// <param name="noteId">Id of the record to delete</param>
+    public Task DeleteHighlight(string noteId);
 }

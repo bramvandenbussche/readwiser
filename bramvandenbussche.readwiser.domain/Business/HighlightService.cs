@@ -113,4 +113,7 @@ public class HighlightService : IHighlightService
 
     public async Task UpdateHighlight(Highlight highlight)
         => await _repository.UpdateHighlight(highlight);
+
+    public async Task DeleteHighlight(string noteId)
+        => await _repository.DeleteHighlight(noteId);
 }

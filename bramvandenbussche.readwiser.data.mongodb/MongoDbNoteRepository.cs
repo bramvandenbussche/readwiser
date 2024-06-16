@@ -67,9 +67,16 @@ namespace bramvandenbussche.readwiser.data.mongodb
         public async Task UpdateHighlight(Highlight highlight)
         {
             var noteId = new BsonObjectId(new ObjectId(highlight.NoteId));
-            var existing = _noteCollection.Find(note => note.Id == noteId).FirstOrDefault();
+            
             var update = Builders<StoredNote>.Update.Set(note => note.Note, highlight.Note);
             await _noteCollection.UpdateOneAsync(note => note.Id == noteId, update);
+        }
+
+        public async Task DeleteHighlight(string noteId)
+        {
+            var id = new BsonObjectId(new ObjectId(noteId));
+
+            await _noteCollection.DeleteOneAsync(note => note.Id == id);
         }
     }
 }

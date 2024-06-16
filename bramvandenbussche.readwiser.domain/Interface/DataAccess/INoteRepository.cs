@@ -43,14 +43,18 @@ public interface INoteRepository
     /// </summary>
     /// <param name="amount">The amount of items to retrieve</param>
     public Task<IEnumerable<Highlight>> GetRecent(int amount);
-
-
-
+    
     /// <summary>
     /// Updates a highlight object.
     /// Only the Note property can be updated.
     /// </summary>
     /// <param name="highlight"></param>
     /// <returns></returns>
-    Task UpdateHighlight(Highlight highlight);
+    public Task UpdateHighlight(Highlight highlight);
+
+    /// <summary>
+    /// Remove highlight from database
+    /// </summary>
+    /// <param name="noteId">Id of the record to delete</param>
+    public Task DeleteHighlight(string noteId);
 }
