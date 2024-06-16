@@ -1,5 +1,7 @@
 # Readwiser
 
+[![Build and publish pipeline](https://github.com/bramvandenbussche/readwiser/actions/workflows/build-and-publish.yml/badge.svg)](https://github.com/bramvandenbussche/readwiser/actions/workflows/build-and-publish.yml)
+
 ## Description
 
 Readwiser is a tool to sync book highlights and annotations from [MoonReader](https://play.google.com/store/apps/details?id=com.flyersoft.moonreaderp&hl=nl&gl=US) (the best e-reader for Android) to [Calibre](https://calibre-ebook.com/). I looked high and low for a solution to this and since I couldn't find any, I decided to build my own.
@@ -131,6 +133,6 @@ In order to download the data from your API into Calibre, you first need to inst
 
 To run the application in Docker, using a local version of MongoDB, also running in Docker, use the following command:
 
-``` powershell
-docker build .; docker compose up
+``` cmd
+build.bat
 ```
