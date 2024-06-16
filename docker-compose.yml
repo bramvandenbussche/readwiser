@@ -10,8 +10,6 @@ services:
       - mongo
 
     environment:
-      "DataStore:MongoDb:ConnectionString": "mongodb://mongo:27017"
-      "DataStore:MongoDb:Database": "readwiser"
       "ApiKey": "zf496N7o5Sq8sCagvxS99ReRp9QCj8f2MteGwhNfk9NMhCk9"
 
     ports:
@@ -25,8 +23,6 @@ services:
       - mongo
 
     environment:
-      "DataStore:MongoDb:ConnectionString": "mongodb://mongo:27017"
-      "DataStore:MongoDb:Database": "readwiser"
       "ApiKey": "zf496N7o5Sq8sCagvxS99ReRp9QCj8f2MteGwhNfk9NMhCk9"
 
     ports:
