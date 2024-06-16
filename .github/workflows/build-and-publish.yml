@@ -34,7 +34,7 @@ jobs:
         name: Build & push Docker image
         with:
           image: bramvandenbussche/readwiser-api
-          tags: ${{ env.SemVer }}, latest
+          tags: ${{ env.GitVersion_SemVer }}, latest
           registry: docker.io
           dockerfile: bramvandenbussche.readwiser.api/Dockerfile
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -44,7 +44,7 @@ jobs:
         name: Build & push Docker image
         with:
           image: bramvandenbussche/readwiser-web
-          tags: ${{ env.SemVer }}, latest
+          tags: ${{ env.GitVersion_SemVer }}, latest
           registry: docker.io
           dockerfile: bramvandenbussche.readwiser.web/Dockerfile
           username: ${{ secrets.DOCKER_USERNAME }}
