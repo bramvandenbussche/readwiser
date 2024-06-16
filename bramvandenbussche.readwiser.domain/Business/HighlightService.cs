@@ -107,9 +107,7 @@ public class HighlightService : IHighlightService
     }
 
     public Task<IEnumerable<Highlight>> GetRecentHighlights(int amount)
-    {
-        return _repository.GetRecent(amount);
-    }
+        => _repository.GetRecent(amount);
 
     public async Task UpdateHighlight(Highlight highlight)
         => await _repository.UpdateHighlight(highlight);

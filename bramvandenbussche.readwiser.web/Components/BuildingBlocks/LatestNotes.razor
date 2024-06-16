@@ -2,11 +2,19 @@
 @using bramvandenbussche.readwiser.domain.Interface.Business
 @inject IHighlightService Service
 
-<h3>Latest Notes</h3>
 
-<p>Recent annotations</p>
-<input type="number" @bind="@_maxNotes" />
-<button class="btn btn-primary" @onclick="() => OnInitializedAsync()">Refresh</button>
+
+<div class="row">
+    <div class="col-4">
+        <h3>Latest Notes</h3>
+    </div>
+    <div class="col-2 offset-6">
+        <div class="input-group mb-2">
+            <input type="number" class="form-control" @bind="@_maxNotes"/>
+            <button class="btn btn-primary" @onclick="() => OnInitializedAsync()">Refresh</button>
+        </div>
+    </div>
+</div>
 
 @if (_recentNotes == null)
 {
