@@ -8,6 +8,8 @@ Readwiser is a tool to sync book highlights and annotations from [MoonReader](ht
 
 This repository contains the API that mimicks the Readwise API and stores the received notes & highlights.
 
+There's an optional frontend which can be used to view the stored highlights and manage them.
+
 It also provides endpoints to retrieve that data. These are implemented by my own extension for the excellent [Calibre Annotations plugin](https://www.mobileread.com/forums/showthread.php?t=241206), the code for which can be found [here](https://github.com/bramvandenbussche/calibre-annotations/blob/feature/readwiser-importer/readers/ReadWiserApp.py).
 
 The following schematic shows how the whole system works:
@@ -42,14 +44,24 @@ services:
     ports:
       - 5113:80 # Pick whichever port you would like to expose
 
+
+  web:
+    image: bramvandenbussche/readwiser-web:latest
+    container_name: web
+    depends_on:
+      - mongo
+
+    ports:
+      - 8112:8080
+
+
   mongo:
     container_name: mongo
     image: mongo
     ports:
       - 27017:27017
     volumes:
-      - ./mongodb_data:/data/db # Choose a location for your mongo data
-    
+      - ./mongodb_data:/data/db # Choose a location for your mongo data    
 ```
 
 You can test that your API is running by using the request defined in [rest-client.http](docs/rest-client.http).
