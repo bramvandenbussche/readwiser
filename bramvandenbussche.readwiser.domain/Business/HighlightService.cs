@@ -62,6 +62,7 @@ public class HighlightService : IHighlightService
                 Title = x.Key,
                 Highlights = x.Select(note => new Highlight()
                 {
+                    NoteId = note.NoteId,
                     Text = note.Text,
                     Chapter = note.Chapter,
                     Note = note.Note,
@@ -109,4 +110,7 @@ public class HighlightService : IHighlightService
     {
         return _repository.GetRecentHighlights(amount);
     }
+
+    public async Task UpdateHighlight(Highlight highlight)
+        => await _repository.UpdateHighlight(highlight);
 }

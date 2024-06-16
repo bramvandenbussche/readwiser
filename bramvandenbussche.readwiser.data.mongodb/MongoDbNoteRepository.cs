@@ -64,5 +64,11 @@ namespace bramvandenbussche.readwiser.data.mongodb
                 .Limit(amount)
                 .ToListAsync())
                 .Select(note => note.AsDomain());
+
+        public async Task UpdateHighlight(Highlight highlight)
+        {
+            var update = Builders<StoredNote>.Update.Set(note => note.Note, highlight.Note);
+            await _noteCollection.UpdateOneAsync(note => note.Id == highlight.NoteId, update);
+        }
     }
 }

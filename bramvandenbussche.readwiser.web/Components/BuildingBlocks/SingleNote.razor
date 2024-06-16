@@ -1,5 +1,7 @@
 ﻿@using bramvandenbussche.readwiser.domain.Model
 @using Humanizer
+@using bramvandenbussche.readwiser.domain.Interface.Business
+@inject IHighlightService Service
 
 @if (Highlight != null)
 {
@@ -12,33 +14,58 @@
                     @Highlight.Title
                     <small>(by <a href="/authors/@Highlight.Author">@Highlight.Author</a>)</small>
                 </h5>
-                <h6 class="card-subtitle text-muted">@Highlight.Chapter</h6>
+                <h6 class="card-subtitle text-muted">@FormatChapter(Highlight.Chapter)</h6>
             </div>
         }
         else
         {
             <div class="card-header">
-                <h6 class="card-subtitle text-muted">
+                <h6 class="card-subtitle">
                     @FormatChapter(Highlight.Chapter)
                 </h6>
             </div>
         }
-        
+
         <div class="card-body">
             <blockquote class="blockquote">
                 @Highlight.Text
             </blockquote>
         </div>
 
-        @if (!string.IsNullOrEmpty(@Highlight.Note))
+        @if (!string.IsNullOrEmpty(@Highlight.Note) && !EditMode)
+        {
+            <div class="card-body bg-light text-muted" style="white-space: pre-wrap;">
+                @Highlight.Note
+            </div>
+        }
+        
+        @if (EditMode)
         {
             <div class="card-body bg-light text-black">
-                <em>@Highlight.Note</em>
+                <textarea class="form-control" @bind="@Highlight.Note"></textarea>
             </div>
         }
 
         <div class="card-footer text-muted">
-            <small title="@Highlight.RaisedTime.ToString("dddd dd MMMM yyyy HH:mm:ss")">Created @Highlight.RaisedTime.Humanize()</small>
+            <div class="row">
+                <div class="col-lg-10">
+                    <small title="@Highlight.RaisedTime.ToString("dddd dd MMMM yyyy HH:mm:ss")">Created @Highlight.RaisedTime.ToString()</small>
+                </div>
+
+                <div class="col-lg-2 text-end">
+                    @if (EditMode)
+                    {
+                        <button class="btn btn-sm bg-success" @onclick="() => Save()">Save</button>
+                        <button class="btn btn-sm bg-info" @onclick="() => ToggleEditMode(false)">Cancel</button>
+                    }
+                    else
+                    {
+                        <button class="btn btn-sm bg-warning" @onclick="() => ToggleEditMode(true)">Edit</button>
+                        <button class="btn btn-sm bg-danger">Delete</button>
+                    }
+                </div>
+            </div>
+
         </div>
     </div>
 }
@@ -50,17 +77,26 @@
     [Parameter]
     public bool ShowBookDetails { get; set; } = false;
 
+    public bool EditMode { get; set; }
+
+    private void ToggleEditMode(bool mode)
+    {
+        EditMode = mode;
+    }
+
+    private async Task Save()
+    {
+        await Service.UpdateHighlight(Highlight);
+        ToggleEditMode(false);
+    }
+
     private string FormatChapter(string? chapter)
     {
         if (string.IsNullOrEmpty(chapter))
-        {
             return "No chapter";
-        }
 
-        if (chapter.Length < 4)
-        {
+        if (chapter.Length <= 4)
             return $"Chapter {chapter}";
-        }
 
         return chapter;
     }

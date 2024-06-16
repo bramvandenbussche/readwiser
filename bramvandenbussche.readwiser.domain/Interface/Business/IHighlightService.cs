@@ -31,4 +31,12 @@ public interface IHighlightService
     /// </summary>
     /// <param name="amount">The amount of items to retrieve</param>
     Task<IEnumerable<Highlight>> GetRecentHighlights(int amount);
+
+    /// <summary>
+    /// Updates a highlight object.
+    /// Only the Note property can be updated.
+    /// </summary>
+    /// <param name="highlight"></param>
+    /// <returns></returns>
+    Task UpdateHighlight(Highlight highlight);
 }
