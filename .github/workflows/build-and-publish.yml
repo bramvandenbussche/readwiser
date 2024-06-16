@@ -16,11 +16,22 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v1.1.1
+        with:
+          versionSpec: '5.x'
+
+      - name: Determine Version
+        uses: gittools/actions/gitversion/execute@v1.1.1
+        with:
+          useConfigFile: true
+          updateAssemblyInfo: true
+
       - uses: mr-smithers-excellent/docker-build-push@v6
         name: Build & push Docker image
         with:
           image: bramvandenbussche/readwiser-api
-          tags: v1, latest
+          tags: ${{ env.SemVer }}, latest
           registry: docker.io
           dockerfile: bramvandenbussche.readwiser.api/Dockerfile
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -30,7 +41,7 @@ jobs:
         name: Build & push Docker image
         with:
           image: bramvandenbussche/readwiser-web
-          tags: v1, latest
+          tags: ${{ env.SemVer }}, latest
           registry: docker.io
           dockerfile: bramvandenbussche.readwiser.web/Dockerfile
           username: ${{ secrets.DOCKER_USERNAME }}
