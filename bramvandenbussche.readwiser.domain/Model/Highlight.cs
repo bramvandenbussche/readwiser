@@ -32,7 +32,7 @@ public class Highlight
 
     public DateTimeOffset RaisedTime { get; set; } = DateTimeOffset.UtcNow;
 
-    public Guid NoteId { get; set; }
+    public string NoteId { get; set; }
     
     public string SortOrder { get; set; }
 }

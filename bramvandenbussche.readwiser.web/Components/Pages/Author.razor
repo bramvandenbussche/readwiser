@@ -10,7 +10,7 @@
 
 <PageTitle>Author: @Name</PageTitle>
 
-<h1>Author: @Name</h1>
+<h1>Books by @Name</h1>
 
 @if (_books == null)
 {
@@ -18,7 +18,7 @@
 }
 else
 {
-    <table class="table">
+    <table class="table table-striped">
         <thead>
         <tr>
             <th>Title</th>
@@ -29,8 +29,8 @@ else
         @foreach (var book in _books)
         {
             var currentBook = book;
-            <tr>
-                <td @onclick="@(() => SelectBook(currentBook))" style="cursor: pointer;">
+            <tr @onclick="@(() => SelectBook(currentBook))" style="cursor: pointer;">
+                <td>
                     @book.Title
                 </td>
                 <td>@book.Highlights.Count()</td>
@@ -65,7 +65,6 @@ else
         if (Name == null) return;
 
         _books = (await Service.GetBooksForAuthor(Name)).ToArray();
-        _selectedBook = _books.Last();
     }
 
     void SelectBook(Book book)

@@ -7,13 +7,9 @@ namespace bramvandenbussche.readwiser.data.mongodb.Model;
 
 public class StoredNote
 {
-    [BsonId]
-    [DataMember]
     [BsonRepresentation(BsonType.ObjectId)]
-    public ObjectId _id { get; set; }
-
     [DataMember]
-    public Guid Id { get; set; }
+    public ObjectId Id { get; set; }
 
     [DataMember]
     public DateTime Timestamp { get; set; }
@@ -51,12 +47,12 @@ public class StoredNote
     public Highlight AsDomain() =>
         new()
         {
+            NoteId = Id.ToString(),
             Author = Author,
             Title = Title,
             Chapter = Chapter,
             Note = Note,
             Text = Text,
-            NoteId = Id,
             RaisedTime = Timestamp
         };
 }

@@ -17,7 +17,7 @@ public sealed class HighlightResponse : ApiResponse
 
     public class HighlightDto
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
 
         public string Timestamp { get; set; } = string.Empty;
         public string HighlightText { get; set; } = string.Empty;

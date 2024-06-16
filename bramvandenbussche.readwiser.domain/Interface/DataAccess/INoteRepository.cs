@@ -42,7 +42,7 @@ public interface INoteRepository
     /// Retrieve a list of the most recent highlights
     /// </summary>
     /// <param name="amount">The amount of items to retrieve</param>
-    public Task<IEnumerable<Highlight>> GetRecentHighlights(int amount);
+    public Task<IEnumerable<Highlight>> GetRecent(int amount);
 
 
 

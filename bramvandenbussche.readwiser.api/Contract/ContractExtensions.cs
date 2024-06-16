@@ -8,7 +8,6 @@ public static class ContractExtensions
     {
         return new Highlight()
         {
-            NoteId = Guid.NewGuid(),
             RaisedTime = DateTimeOffset.UtcNow,
             Author = dto.Author,
             Title = dto.Title,

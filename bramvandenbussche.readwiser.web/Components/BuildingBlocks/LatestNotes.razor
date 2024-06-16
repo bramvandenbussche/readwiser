@@ -4,6 +4,10 @@
 
 <h3>Latest Notes</h3>
 
+<p>Recent annotations</p>
+<input type="number" @bind="@_maxNotes" />
+<button class="btn btn-primary" @onclick="() => OnInitializedAsync()">Refresh</button>
+
 @if (_recentNotes == null)
 {
     <p><em>Loading...</em></p>
@@ -20,8 +24,12 @@ else
 @code {
     private Highlight[]? _recentNotes;
 
+    private int _maxNotes = 5;
+
     protected override async Task OnInitializedAsync()
     {
-        _recentNotes = (await Service.GetRecentHighlights(5)).ToArray();
+        Console.WriteLine("Loading data");
+        _recentNotes = null;
+        _recentNotes = (await Service.GetRecentHighlights(_maxNotes)).ToArray();
     }
 }
