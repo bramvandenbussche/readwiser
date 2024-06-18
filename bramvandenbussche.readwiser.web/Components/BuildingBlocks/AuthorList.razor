@@ -8,21 +8,29 @@
 }
 else
 {
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Name</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var author in _authors)
-        {
+    if (_authors.Length == 0)
+    {
+        <EmptyDatabaseWarnin />
+    }
+    else
+    {
+        <table class="table">
+            <thead>
             <tr>
-                <td><a href="/authors/@author">@author</a></td>
+                <th>Name</th>
             </tr>
-        }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            @foreach (var author in _authors)
+            {
+                <tr>
+                    <td><a href="/authors/@author">@author</a></td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+    
 }
 
 @code {

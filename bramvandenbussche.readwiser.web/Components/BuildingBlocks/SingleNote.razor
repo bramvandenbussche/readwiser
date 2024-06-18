@@ -39,11 +39,14 @@
             <div class="card-body bg-light text-muted" style="white-space: pre-wrap;">
                 @Highlight.Note
             </div>
+
+            
         }
-        
+
         @if (EditMode)
         {
             <div class="card-body bg-light text-black">
+                <h6>Note</h6>
                 <textarea class="form-control" @bind="@Highlight.Note" placeholder="Thoughts on this highlighted text?"></textarea>
             </div>
         }

@@ -18,13 +18,17 @@ namespace bramvandenbussche.readwiser.data.mongodb
 
             _noteCollection = database.GetCollection<StoredNote>(COLLECTION_NAME);
 
+            EnsureIndexExists(_noteCollection);
+        }
+
+        private static void EnsureIndexExists(IMongoCollection<StoredNote> collection)
+        {
             // Create index (if it does not exist - if it does, server will simply return a success command)
-            _noteCollection.Indexes.CreateOne(new CreateIndexModel<StoredNote>(
+            collection.Indexes.CreateOne(new CreateIndexModel<StoredNote>(
                 Builders<StoredNote>
                     .IndexKeys
                     .Ascending(n => n.Author)
                     .Ascending(n => n.Title)
-
             ));
         }
 

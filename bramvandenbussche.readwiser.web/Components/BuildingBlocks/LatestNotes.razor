@@ -18,10 +18,15 @@
 
 @if (_recentNotes == null)
 {
-    <p><em>Loading...</em></p>
+    <EmptyDatabaseWarnin />
 }
 else
 {
+    if (_recentNotes.Length == 0)
+    {
+        <p><em>No notes found</em></p>
+    }
+
     @foreach (var note in _recentNotes)
     {
         <SingleNote Highlight="@note" ShowBookDetails="true" />
