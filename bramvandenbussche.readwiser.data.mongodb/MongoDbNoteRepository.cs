@@ -14,7 +14,28 @@ namespace bramvandenbussche.readwiser.data.mongodb
 
         public MongoDbNoteRepository(IMongoDatabase database)
         {
+            EnsureDatabaseExists(database);
+
             _noteCollection = database.GetCollection<StoredNote>(COLLECTION_NAME);
+
+            // Create index (if it does not exist - if it does, server will simply return a success command)
+            _noteCollection.Indexes.CreateOne(new CreateIndexModel<StoredNote>(
+                Builders<StoredNote>
+                    .IndexKeys
+                    .Ascending(n => n.Author)
+                    .Ascending(n => n.Title)
+
+            ));
+        }
+
+        private static void EnsureDatabaseExists(IMongoDatabase database)
+        {
+            var databaseName = database.DatabaseNamespace.DatabaseName;
+            var dbs = database.Client.ListDatabaseNames().ToList();
+            if (!dbs.Contains(databaseName))
+            {
+                var db = database.Client.GetDatabase(databaseName);
+            }
         }
 
         public async Task<IEnumerable<Highlight>> GetAll(int timestamp)
@@ -29,7 +50,7 @@ namespace bramvandenbussche.readwiser.data.mongodb
                 .Select(note => note.AsDomain());
 
 
-        public async Task<IEnumerable<Highlight>> GetNotesForAuthor(string author) 
+        public async Task<IEnumerable<Highlight>> GetNotesForAuthor(string author)
             => (await _noteCollection.Find(x => x.Author == author)
                     .ToListAsync())
                 .Select(note => note.AsDomain());
@@ -67,7 +88,7 @@ namespace bramvandenbussche.readwiser.data.mongodb
         public async Task UpdateHighlight(Highlight highlight)
         {
             var noteId = new BsonObjectId(new ObjectId(highlight.NoteId));
-            
+
             var update = Builders<StoredNote>.Update.Set(note => note.Note, highlight.Note);
             await _noteCollection.UpdateOneAsync(note => note.Id == noteId, update);
         }

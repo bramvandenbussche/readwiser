@@ -28,6 +28,7 @@ public static class DependencyInjection
         //  - MongoDb
         services.AddMongo(configuration["DataStore:MongoDb:ConnectionString"],
             configuration["DataStore:MongoDb:Database"]);
+
         services.Scan(scan => scan
             .FromAssemblyOf<MongoDbNoteRepository>()
             .AddClasses()
