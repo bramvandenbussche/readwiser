@@ -1,0 +1,32 @@
+﻿@using bramvandenbussche.readwiser.domain.Interface.Business
+@inject IHighlightService Service
+
+@foreach (var tag in Tags ?? new List<string>())
+{
+    @if (ShowDelete)
+    {
+        <button class="btn badge bg-info me-1 tag" @onclick="() => DeleteTag(tag)" title="Click to delete tag '@tag'">
+            @tag
+        </button>
+    }
+    else
+    {
+        <span class="badge bg-info me-1">@tag</span>
+    }
+}
+
+@code {
+    [Parameter]
+    public List<string>? Tags { get; set; } = default;
+
+    [Parameter]
+    public bool ShowDelete { get; set; } = false;
+
+    [Parameter]
+    public EventCallback<string> OnTagDeleted { get; set; }
+
+    public void DeleteTag(string tag)
+    {
+        OnTagDeleted.InvokeAsync(tag);
+    }
+}

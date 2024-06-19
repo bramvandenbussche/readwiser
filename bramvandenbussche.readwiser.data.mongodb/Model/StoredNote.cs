@@ -39,9 +39,14 @@ public class StoredNote
     public string? Note { get; set; }
 
     /// <summary>
+    /// List of associated tags
+    /// </summary>
+    public List<string> Tags { get; set; } = new();
+
+    /// <summary>
     /// The chapter where the highlight was made
     /// </summary>
-    [DataMember]
+    [DataMember]    
     public string Chapter { get; set; } = string.Empty;
 
     public Highlight AsDomain() =>
@@ -53,6 +58,7 @@ public class StoredNote
             Chapter = Chapter,
             Note = Note,
             Text = Text,
-            RaisedTime = Timestamp
+            RaisedTime = Timestamp,
+            Tags = Tags
         };
 }

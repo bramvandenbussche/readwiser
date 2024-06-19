@@ -19,4 +19,12 @@
     <ProjectReference Include="..\bramvandenbussche.readwiser.domain\bramvandenbussche.readwiser.domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Components\BuildingBlocks\TagList.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Components\BuildingBlocks\TagList.razor" />
+  </ItemGroup>
+
 </Project>

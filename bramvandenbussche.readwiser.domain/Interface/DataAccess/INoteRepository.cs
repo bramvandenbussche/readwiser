@@ -57,4 +57,9 @@ public interface INoteRepository
     /// </summary>
     /// <param name="noteId">Id of the record to delete</param>
     public Task DeleteHighlight(string noteId);
+
+
+    public Task<List<string>?> GetAllTags();
+    public Task AddTag(string noteId, string tag);
+    public Task RemoveTag(string noteId, string tag);
 }

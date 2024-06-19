@@ -3,12 +3,15 @@
 @using bramvandenbussche.readwiser.domain.Interface.Business
 @using BlazorBootstrap
 @inject IHighlightService Service
+@inject ILogger<SingleNote> Logger
 
 @if (Highlight != null)
 {
     <ConfirmDialog @ref="_dialog" />
 
     <div class="card border-dark mb-3">
+
+        @* Header *@
         @if (ShowBookDetails)
         {
             <div class="card-header">
@@ -28,19 +31,19 @@
             </div>
         }
 
+        @* Highlighted text *@
         <div class="card-body">
             <blockquote class="blockquote">
                 @Highlight.Text
             </blockquote>
         </div>
 
+        @* Notes *@
         @if (!string.IsNullOrEmpty(@Highlight.Note) && !EditMode)
         {
-            <div class="card-body bg-light text-muted" style="white-space: pre-wrap;">
+            <div class="card-body bg-light text-muted pb-0" style="white-space: pre-wrap;">
                 @Highlight.Note
             </div>
-
-            
         }
 
         @if (EditMode)
@@ -51,6 +54,35 @@
             </div>
         }
 
+        @* Tags *@
+        <div class="card-body bg-light text-muted">
+            <TagList Tags="@Highlight.Tags" ShowDelete="true" OnTagDeleted="@DeleteTag" />
+
+
+            @if (!TagEditMode)
+            {
+                <button class="btn badge bg-light me-1 border-dark-subtle" style="border-style: dotted;" @onclick="() => ToggleTagEditMode(true)">Add tag</button>
+            }
+            else
+            {
+                @* <div class="input-group"> *@
+                    <input class="btn btn-xs bg-light border-dark-subtle" list="tagOptions" placeholder="tag name" @bind="_newTagName" @onkeyup="@Enter">
+                    <datalist id="tagOptions">
+                        @foreach (var tag in KnownTags)
+                        {
+                            <option value="@tag" />
+                        }
+                    </datalist>
+                    @* <button class="btn btn-xs bg-success" @onclick="() => AddTag()">Save</button>
+                    <button class="btn btn-xs bg-warning" @onclick="() => ToggleTagEditMode(false)">Cancel</button>
+                </div> *@
+
+
+            }
+
+        </div>
+
+        @* Footer *@
         <div class="card-footer text-muted">
             <div class="row">
                 <div class="col-lg-10">
@@ -61,7 +93,7 @@
                     @if (EditMode)
                     {
                         <button class="btn btn-sm bg-success" @onclick="() => Save()">Save</button>
-                        <button class="btn btn-sm bg-info" @onclick="() => ToggleEditMode(false)">Cancel</button>
+                        <button class="btn btn-sm bg-secondary" @onclick="() => ToggleEditMode(false)">Cancel</button>
                     }
                     else
                     {
@@ -70,7 +102,6 @@
                     }
                 </div>
             </div>
-
         </div>
     </div>
 }
@@ -82,11 +113,18 @@
     [Parameter]
     public bool ShowBookDetails { get; set; } = false;
 
-    public bool EditMode { get; set; } = false;
+    [Parameter]
+    public List<string>? KnownTags { get; set; } = new();
 
+    private string? _newTagName;
     private ConfirmDialog _dialog = default!;
 
+    public bool EditMode { get; set; } = false;
     private void ToggleEditMode(bool mode) => EditMode = mode;
+
+    public bool TagEditMode { get; set; } = false;
+    private void ToggleTagEditMode(bool mode) => TagEditMode = mode;
+
 
     private async Task Save()
     {
@@ -97,12 +135,12 @@
     private async Task ShowConfirmationAsync()
     {
         var options = new ConfirmDialogOptions
-        {
-            YesButtonText = "Yes, do it",
-            YesButtonColor = ButtonColor.Danger,
-            NoButtonText = "No, keep the record",
-            NoButtonColor = ButtonColor.Success
-        };
+            {
+                YesButtonText = "Yes, do it",
+                YesButtonColor = ButtonColor.Danger,
+                NoButtonText = "No, keep the record",
+                NoButtonColor = ButtonColor.Success
+            };
 
         var confirmation = await _dialog.ShowAsync(
             title: "Are you sure you want to delete this highlight?",
@@ -112,11 +150,54 @@
 
         if (confirmation)
         {
+            Logger.LogInformation($"Deleting Highlight for {Highlight.Author} - {Highlight.Title}");
             await Service.DeleteHighlight(Highlight.NoteId);
             Highlight = null;
         }
     }
 
+    public async Task DeleteTag(string tag)
+    {
+        await Service.RemoveTag(Highlight.NoteId, tag);
+        Highlight.Tags.Remove(tag);
+    }
+
+    public async Task Enter(KeyboardEventArgs e)
+    {
+        if (e.Code == "Enter" || e.Code == "NumpadEnter")
+        {
+            await AddTag();
+        }
+
+        if (e.Code == "Escape")
+        {
+            _newTagName = string.Empty;
+            ToggleTagEditMode(false);
+        }
+    }
+
+    public async Task AddTag()
+    {
+        if (string.IsNullOrEmpty(_newTagName)) return;
+
+        Logger.LogInformation($"'{_newTagName}' selected.");
+
+        if (!Highlight.Tags.Contains(_newTagName)) // Only add if not already present
+        {
+            // Update database
+            await Service.AddTag(Highlight.NoteId, _newTagName);
+            // Add tag to highlight (so we don't need to reload)
+            Highlight.Tags.Add(_newTagName);
+
+            // Add tag to known tags
+            if (!KnownTags.Contains(_newTagName))
+                KnownTags.Add(_newTagName);
+        }
+
+        // Reset UI
+        _newTagName = string.Empty;
+        ToggleTagEditMode(false);
+    }
 
     private string FormatChapter(string? chapter)
     {

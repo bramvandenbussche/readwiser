@@ -30,6 +30,11 @@ namespace bramvandenbussche.readwiser.data.mongodb
                     .Ascending(n => n.Author)
                     .Ascending(n => n.Title)
             ));
+
+            collection.Indexes.CreateOne(new CreateIndexModel<StoredNote>(
+                Builders<StoredNote>
+                    .IndexKeys.Ascending(n => n.Tags)
+            ));
         }
 
         private static void EnsureDatabaseExists(IMongoDatabase database)
@@ -65,12 +70,16 @@ namespace bramvandenbussche.readwiser.data.mongodb
 
 
         public async Task<IEnumerable<Highlight>> GetRecent(int amount)
-            => (await _noteCollection
-                .Find(_ => true)
-                .SortByDescending(n => n.Timestamp)
-                .Limit(amount)
-                .ToListAsync())
+        {
+            var data =  (await _noteCollection
+                    .Find(_ => true)
+                    .SortByDescending(n => n.Timestamp)
+                    .Limit(amount)
+                    .ToListAsync());
+
+                return data
                 .Select(note => note.AsDomain());
+        }
 
 
         public async Task Save(Highlight note)
@@ -83,7 +92,8 @@ namespace bramvandenbussche.readwiser.data.mongodb
                 Author = note.Author,
                 Chapter = note.Chapter,
                 Text = note.Text,
-                Note = note.Note
+                Note = note.Note,
+                Tags = new List<string>()
             };
 
             await _noteCollection.InsertOneAsync(newNote);
@@ -102,6 +112,30 @@ namespace bramvandenbussche.readwiser.data.mongodb
             var id = new BsonObjectId(new ObjectId(noteId));
 
             await _noteCollection.DeleteOneAsync(note => note.Id == id);
+        }
+
+
+
+        public async Task<List<string>?> GetAllTags()
+        {
+            FieldDefinition<StoredNote, string> field = "Tags";
+            return await _noteCollection.Distinct(field, FilterDefinition<StoredNote>.Empty).ToListAsync();
+        }
+
+        public async Task AddTag(string noteId, string tag)
+        {
+            var bsonNoteId = new BsonObjectId(new ObjectId(noteId));
+
+            var update = Builders<StoredNote>.Update.AddToSet(note => note.Tags, tag);
+            await _noteCollection.UpdateOneAsync(note => note.Id == bsonNoteId, update);
+        }
+
+        public async Task RemoveTag(string noteId, string tag)
+        {
+            var bsonNoteId = new BsonObjectId(new ObjectId(noteId));
+
+            var update = Builders<StoredNote>.Update.Pull(note => note.Tags, tag);
+            await _noteCollection.UpdateOneAsync(note => note.Id == bsonNoteId, update);
         }
     }
 }

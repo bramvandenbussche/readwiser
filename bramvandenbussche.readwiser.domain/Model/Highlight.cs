@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace bramvandenbussche.readwiser.domain.Model;
@@ -35,4 +36,6 @@ public class Highlight
     public string NoteId { get; set; }
     
     public string SortOrder { get; set; }
+
+    public List<string> Tags { get; set; } = new();
 }

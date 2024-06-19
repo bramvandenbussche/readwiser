@@ -45,4 +45,21 @@ public interface IHighlightService
     /// </summary>
     /// <param name="noteId">Id of the record to delete</param>
     public Task DeleteHighlight(string noteId);
+
+    public Task<List<string>> GetAllTags();
+
+    /// <summary>
+    /// Add a tag to a note
+    /// </summary>
+    /// <param name="noteId">The ID of the note</param>
+    /// <param name="tag">The tag to add</param>
+    public Task AddTag(string noteId, string tag);
+
+    /// <summary>
+    /// Remove a tag from a note
+    /// </summary>
+    /// <param name="noteId">The ID of the note</param>
+    /// <param name="tag">The tag to remove</param>
+    /// <returns></returns>
+    public Task RemoveTag(string noteId, string tag);
 }
