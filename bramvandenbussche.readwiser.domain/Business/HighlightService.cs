@@ -116,7 +116,13 @@ public class HighlightService : IHighlightService
         => await _repository.DeleteHighlight(noteId);
 
     public async Task<List<string>> GetAllTags()
-        => await _repository.GetAllTags() ?? new List<string>();
+    {
+        var data = await _repository.GetAllTags();
+
+        if (data == null) return new List<string>();
+
+        return data.Where(tag => !string.IsNullOrEmpty(tag)).ToList();
+    }
 
     public async Task AddTag(string noteId, string tag)
      => await _repository.AddTag(noteId, tag);
