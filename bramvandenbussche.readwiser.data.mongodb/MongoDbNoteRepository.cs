@@ -119,7 +119,9 @@ namespace bramvandenbussche.readwiser.data.mongodb
         public async Task<List<string>?> GetAllTags()
         {
             FieldDefinition<StoredNote, string> field = "Tags";
-            return await _noteCollection.Distinct(field, FilterDefinition<StoredNote>.Empty).ToListAsync();
+            var filter = new FilterDefinitionBuilder<StoredNote>().Exists(field, true);
+            
+            return await _noteCollection.Distinct(field, filter).ToListAsync();
         }
 
         public async Task AddTag(string noteId, string tag)
