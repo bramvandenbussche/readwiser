@@ -102,6 +102,31 @@ namespace bramvandenbussche.readwiser.api.Controllers
 
         #endregion
 
+        /// <summary>
+        /// Export all highlights as a flat JSON array for programmatic consumption.
+        /// </summary>
+        [HttpGet("~/api/export")]
+        [Authorize]
+        public async Task<ActionResult> Export()
+        {
+            _logger.LogDebug($"{nameof(Export)}: Request received");
+            var data = await _service.GetAll(0);
+
+            var export = data.Select(h => new
+            {
+                title = h.Title,
+                author = h.Author,
+                text = h.Text,
+                chapter = h.Chapter,
+                note = h.Note,
+                tags = h.Tags,
+                raisedTime = h.RaisedTime
+            });
+
+            _logger.LogInformation($"{nameof(Export)}: Returned {data.Count()} highlights");
+            return Ok(export);
+        }
+
 
         /// <summary>
         /// Get a list of authors with notes
